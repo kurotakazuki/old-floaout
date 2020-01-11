@@ -1,0 +1,8 @@
+[package]
+name = "pop"
+version = "0.1.0"
+authors = ["kurotakazuki"]
+edition = "2018"
+
+
+[dependencies]
