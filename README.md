@@ -20,11 +20,11 @@ Floaout enables immersive sound.
 | Artist            | artist            | `String`           | Artist (UTF-8)                    |
 | Lyrics Size       | lyrics_size       | `u16` (2)          | Lyrics Size                       |
 | Lyrics            | lyrics            | `String`           | Lyrics (UTF-8)                    |
-| CRC-32            | crc_32            | `u32` (4)          | Everything until Begin            |
+| CRC-32C           | crc_32_c          | `u32` (4)          | Everything until Begin            |
 | Image Size        | image_size        | `u32` (4)          | Image Size                        |
 | Image Code        | image_code        | `u32` (4)          | Image Code                        |
 | Image             | image             |                    | Image                             |
-| CRC-32            | crc_32            | `u32` (4)          | Everything until previous CRC     |
+| CRC-32C           | crc_32_c          | `u32` (4)          | Everything until previous CRC     |
 #### Each Bubble
 | Name              | Field             | `Type` (Length)    | Contents                          |
 | ----------------- | ----------------- | ------------------ | --------------------------------- |
@@ -33,7 +33,7 @@ Floaout enables immersive sound.
 | Red               | red               | `u8` (1)           | Red                               |
 | Green             | green             | `u8` (1)           | Green                             |
 | Blue              | blue              | `u8` (1)           | Blue                              |
-| CRC-32            | crc_32            | `u32` (4)          | Everything until Name Size        |
+| CRC-32C           | crc_32_c          | `u32` (4)          | Everything until Name Size        |
 #### Each Block
 | Name              | Field             | `Type` (Length)    | Contents                          |
 | ----------------- | ----------------- | ------------------ | --------------------------------- |
@@ -42,7 +42,7 @@ Floaout enables immersive sound.
 | …                 | …                 | …                  | …                                 |
 | Wave Data i       | (wave_data_i)     | (Wave Data i)      |                                   |
 | Form i            | (form_i)          | (Bubble Field*u8)  | Data of Bubble Field              |
-| CRC-32            | crc_32            | `u32` (4)          | Everything until previous CRC     |
+| CRC-32C           | crc_32_c          | `u32` (4)          | Everything until previous CRC     |
 
 i = Number of Bubbles
 
@@ -118,4 +118,5 @@ Pop is player of Floaout(.oao).
 
 ## License
 
-Expect modify or derive from these formats specification, anyone can use or create these formats for whatever you want.
+- Expect modify or derive from these formats specification, anyone can use or create these formats for whatever you want.
+- these formats = { Blower, Bubble, Floaout }
