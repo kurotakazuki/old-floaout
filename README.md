@@ -53,7 +53,7 @@ Soap makes extensions of Bubbles(.bub).
 ### Bubble (.bub)
 | Name             | Field            | `Type` (Length)      | Contents                          |
 | -----------------| ---------------- | -------------------- | --------------------------------- |
-| Bubble           | bubble           | `String` (4)         | “bub ” means Bubble               |
+| Bubble           | bubble           | `String` (3)         | “bub” means Bubble               |
 | Version          | version          | `u8` (1)             | Version of Bubble (0~255)         |
 | Length           | length           | `u8` (1)             | Length of Bubble field (2^n)      |
 | Width            | width            | `u8` (1)             | Width of Bubble field (2^n)       |
@@ -118,5 +118,5 @@ Pop is player of Floaout(.oao).
 
 ## License
 
-- Expect modify or derive from these formats specification, anyone can use or create these formats for whatever you want.
+- Except modify or derive from these formats specification, anyone can use or create these formats the way each wants.
 - these formats = { Blower, Bubble, Floaout }
