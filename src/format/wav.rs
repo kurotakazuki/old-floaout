@@ -1,6 +1,6 @@
 use std::fmt;
 
-/// Details of the wav file.
+/// Details of the Wav file.
 #[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Wav {
     // Riff Chunk
@@ -16,7 +16,7 @@ pub struct Wav {
     // Data Chunk
     pub data_size: u32,
     // Other Chunk
-    pub other_size: u32,
+    pub other_size: u32
 }
 
 impl fmt::Display for Wav {
@@ -33,7 +33,7 @@ impl fmt::Display for Wav {
             self.data_block_size,
             self.bits_per_sample,
             self.data_size,
-            self.other_size,
+            self.other_size
         )
     }
 }
