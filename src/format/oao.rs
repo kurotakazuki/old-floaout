@@ -12,6 +12,6 @@ pub struct Floaout {
     pub title_size: u8,
     pub artist_size: u8,
     pub lyrics_size: u16,
-    pub image_code: u32,
+    pub image_code: u8,
     pub image_size: u32
 }
