@@ -101,6 +101,11 @@ Blower makes extensions of Floaout(.oao) and uses extensions of Blower(.blow).
 | Title             | `String`           | Title (UTF-8)                     |
 | Artist Size       | `u8` (1)           | Artist Size                       |
 | Artist            | `String`           | Artist (UTF-8)                    |
+| Lyrics Size       | `u16` (2)          | Lyrics Size                       |
+| Lyrics            | `String`           | Lyrics (UTF-8)                    |
+| Image Code        | `u8` (1)           | Image Code                        |
+| Image Size        | `u32` (4)          | Image Size                        |
+| Image             |                    | Image                             |
 | Bubbles Name Size | `Vec<u8>`          | Bubbles Name Size                 |
 | Bubbles Name      | `Vec<String>`      | Bubbles Name                      |
 | Bubbles Time Size | `Vec<u64>`         | Bubbles Time Size                 |
