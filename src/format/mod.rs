@@ -10,7 +10,7 @@ pub mod wav;
 #[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Format {
     pub channels: u16,
+    pub blocks: u64,
     pub sampling_rate: u32,
-    pub bits_per_sample: u16,
-    pub blocks: u64
+    pub bits_per_sample: u16
 }
