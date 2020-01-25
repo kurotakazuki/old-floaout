@@ -1,3 +1,5 @@
+use crate::format::Format;
+
 /// Details of the Floaout file.
 #[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Floaout {
@@ -14,4 +16,35 @@ pub struct Floaout {
     pub lyrics_size: u16,
     pub image_code: u8,
     pub image_size: u32
+}
+
+impl From<Format> for Floaout {
+    fn from(format: Format) -> Self {
+        Self {
+            version: 0,
+            length: 0,
+            width: 0,
+            height: 0,
+            bubbles: 0,
+            blocks: format.blocks,
+            sampling_rate: format.sampling_rate,
+            bits_per_sample: format.bits_per_sample,
+            title_size: 0,
+            artist_size: 0,
+            lyrics_size: 0,
+            image_code: 0,
+            image_size: 0
+        }
+    }
+}
+
+impl Into<Format> for Floaout {
+    fn into(self) -> Format {
+        Format {
+            channels: 1,
+            blocks: self.blocks,
+            sampling_rate: self.sampling_rate,
+            bits_per_sample: self.bits_per_sample
+        }
+    }
 }
