@@ -37,7 +37,7 @@ impl From<Format> for Bubble {
 impl Into<Format> for Bubble {
     fn into(self) -> Format {
         Format {
-            channels: (1 << self.length) * (1 << self.width) * (1 << self.height),
+            channels: 1,
             blocks: self.blocks,
             sampling_rate: self.sampling_rate,
             bits_per_sample: self.bits_per_sample
