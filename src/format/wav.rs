@@ -60,7 +60,7 @@ impl TryFrom<Format> for Wav {
                     data_block_size: bytes_per_sample * value.channels,
                     bits_per_sample: value.bits_per_sample,
                     data_size: (riff_size - 36) as u32,
-                    other_size: 0
+                    ..Default::default()
                 }
             )
         }
