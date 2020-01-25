@@ -21,19 +21,10 @@ pub struct Floaout {
 impl From<Format> for Floaout {
     fn from(format: Format) -> Self {
         Self {
-            version: 0,
-            length: 0,
-            width: 0,
-            height: 0,
-            bubbles: 0,
             blocks: format.blocks,
             sampling_rate: format.sampling_rate,
             bits_per_sample: format.bits_per_sample,
-            title_size: 0,
-            artist_size: 0,
-            lyrics_size: 0,
-            image_code: 0,
-            image_size: 0
+            ..Default::default()
         }
     }
 }

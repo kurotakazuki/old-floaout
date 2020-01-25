@@ -19,17 +19,10 @@ pub struct Bubble {
 impl From<Format> for Bubble {
     fn from(format: Format) -> Self {
         Self {
-            version: 0,
-            length: 0,
-            width: 0,
-            height: 0,
-            red: 0,
-            green: 0,
-            blue: 0,
             blocks: format.blocks,
             sampling_rate: format.sampling_rate,
             bits_per_sample: format.bits_per_sample,
-            name_size: 0
+            ..Default::default()
         }
     }
 }
