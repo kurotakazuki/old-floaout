@@ -19,6 +19,9 @@ pub struct Bubble {
 impl From<Format> for Bubble {
     fn from(format: Format) -> Self {
         Self {
+            length: format.length,
+            width: format.width,
+            height: format.height,
             blocks: format.blocks,
             sampling_rate: format.sampling_rate,
             bits_per_sample: format.bits_per_sample,
@@ -30,7 +33,9 @@ impl From<Format> for Bubble {
 impl Into<Format> for Bubble {
     fn into(self) -> Format {
         Format {
-            channels: 1,
+            length: self.length,
+            width: self.width,
+            height: self.height,
             blocks: self.blocks,
             sampling_rate: self.sampling_rate,
             bits_per_sample: self.bits_per_sample
