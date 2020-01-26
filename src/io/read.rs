@@ -108,6 +108,25 @@ impl<R: Read + ?Sized> ReadBytes<u64> for R {
 
 pub trait ReadExt<T>: Read {
     fn read_details(&mut self) -> Result<T>;
+
+    #[inline]
+    fn read_for(&mut self, size: usize) -> Result<Vec<u8>> {
+        let mut buf = Vec::new();
+        let mut bytes = [0; 1];
+        for _ in 0..size {
+            self.read_exact(&mut bytes)?;
+            buf.push(bytes[0]);
+        }
+
+        Ok(buf)
+    }
+
+    #[inline]
+    fn read_string_for(&mut self, size: usize) -> Result<String> {
+        let buf = self.read_for(size)?;
+
+        Ok(std::string::String::from_utf8(buf).unwrap())
+    }
 }
 
 impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
