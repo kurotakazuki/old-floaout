@@ -155,17 +155,16 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
         let mut details = Wav::default();
         // Repeat when there is a chunk.
         loop {
-            let mut chunk_name = [0; 4];
-            self.read_exact(&mut chunk_name)?;
+            let chunk_name = self.read_string_for(4)?;
             // Allocate by chunk name.
-            match chunk_name {
+            match &chunk_name[..] {
                 // RIFF
-                [82, 73, 70, 70] => {
+                "RIFF" => {
                     details.riff_size = self.read_le_bytes()?;
                     self.seek_relative(4)?;
                 },
                 // Format
-                [102, 109, 116, 32] => {
+                "fmt " => {
                     details.format_size = self.read_le_bytes()?;
                     details.format_code = self.read_le_bytes()?;
                     details.channels = self.read_le_bytes()?;
@@ -175,7 +174,7 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
                     details.bits_per_sample = self.read_le_bytes()?;
                 },
                 // Data
-                [100, 97, 116, 97] => {
+                "data" => {
                     details.data_size = self.read_le_bytes()?;
                     break
                 },
