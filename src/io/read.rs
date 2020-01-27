@@ -46,14 +46,14 @@ impl<R: Read + ?Sized> ReadBytes<u8> for R {
     fn read_be_bytes(&mut self) -> Result<u8> {
         let mut bytes = [0; 1];
         self.read_exact(&mut bytes)?;
-        Ok(bytes[0])
+        Ok(u8::from_be_bytes(bytes))
     }
 
     #[inline]
     fn read_le_bytes(&mut self) -> Result<u8> {
         let mut bytes = [0; 1];
         self.read_exact(&mut bytes)?;
-        Ok(bytes[0])
+        Ok(u8::from_le_bytes(bytes))
     }
 }
 
