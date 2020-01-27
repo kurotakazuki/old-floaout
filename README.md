@@ -106,17 +106,15 @@ Blower makes extensions of Floaout(.oao) and uses extensions of Blower(.blow).
 | Image Code        | `u8` (1)           | Image Code                        |
 | Image Size        | `u32` (4)          | Image Size                        |
 | Image             |                    | Image                             |
-| Bubbles Name Size | `Vec<u8>`          | Bubbles Name Size                 |
-| Bubbles Name      | `Vec<String>`      | Bubbles Name                      |
-| Bubbles Time Size | `Vec<u64>`         | Bubbles Time Size                 |
-| Bubbles Time      | `Vec<(u64, u64)>`  | (start, end)                      |
 
 
 ### BubblesInBlower
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
+| Name Size         | `u8`               | Bubble Name Size                  |
 | Name              | `String`           | Bubble Name                       |
-| Time              | `Vec<(u64, u64)>`  | (start, end)                      |
+| Times             | `u32`              | Bubble Time                       |
+| Range             | `Vec<(u64, u64)>`  | (start, end)                      |
 
 
 ## Pop

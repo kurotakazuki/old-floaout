@@ -21,7 +21,6 @@ pub struct Floaout {
     pub image_size: u32
 }
 
-
 impl From<Blower> for Floaout {
     fn from(blower: Blower) -> Self {
         Self {

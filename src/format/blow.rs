@@ -18,3 +18,11 @@ pub struct Blower {
     pub image_code: u8,
     pub image_size: u32
 }
+
+#[derive(Clone, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
+pub struct BubblesInBlower {
+    pub name_size: u8,
+    pub name: String,
+    pub times: u32,
+    pub range: Vec<(u64, u64)>
+}
