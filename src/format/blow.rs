@@ -1,5 +1,5 @@
 /// Details of the Blower file.
-#[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Blower {
     pub version: u8,
     pub length: u8,
