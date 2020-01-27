@@ -1,5 +1,3 @@
-use crate::format::Format;
-use std::convert::TryFrom;
 use std::fmt;
 
 /// Details of the Wav file.
@@ -37,33 +35,5 @@ impl fmt::Display for Wav {
             self.data_size,
             self.other_size
         )
-    }
-}
-
-impl TryFrom<Format> for Wav {
-    type Error = &'static str;
-
-    fn try_from(format: Format) -> Result<Self, Self::Error> {
-        let channels = format.channels();
-        let bytes_per_sample = format.bits_per_sample / 8;
-        let riff_size = (channels * bytes_per_sample) as u64 * format.blocks + 36;
-        if riff_size > u32::max_value() as u64 {
-            Err("Wav riff size only accepts format no more than the largest format of u32!")
-        } else {
-            Ok(
-                Self {
-                    riff_size: riff_size as u32,
-                    format_size: 16,
-                    format_tag: 3,
-                    channels: channels,
-                    sampling_rate: format.sampling_rate,
-                    data_rate: format.sampling_rate * (bytes_per_sample * channels) as u32,
-                    data_block_size: bytes_per_sample * channels,
-                    bits_per_sample: format.bits_per_sample,
-                    data_size: (riff_size - 36) as u32,
-                    ..Default::default()
-                }
-            )
-        }
     }
 }
