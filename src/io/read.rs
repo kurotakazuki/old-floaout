@@ -152,7 +152,7 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
     /// ```
     #[inline]
     fn read_details(&mut self) -> Result<Wav> {
-        let mut details = Wav::default();
+        let mut wav = Wav::default();
         // Repeat when there is a chunk.
         loop {
             let chunk_name = self.read_string_for(4)?;
@@ -160,34 +160,34 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
             match &chunk_name[..] {
                 // RIFF
                 "RIFF" => {
-                    details.riff_size = self.read_le_bytes()?;
+                    wav.riff_size = self.read_le_bytes()?;
                     self.seek_relative(4)?;
                 },
                 // Format
                 "fmt " => {
-                    details.format_size = self.read_le_bytes()?;
-                    details.format_tag = self.read_le_bytes()?;
-                    details.channels = self.read_le_bytes()?;
-                    details.sampling_rate = self.read_le_bytes()?;
-                    details.data_rate = self.read_le_bytes()?;
-                    details.data_block_size = self.read_le_bytes()?;
-                    details.bits_per_sample = self.read_le_bytes()?;
+                    wav.format_size = self.read_le_bytes()?;
+                    wav.format_tag = self.read_le_bytes()?;
+                    wav.channels = self.read_le_bytes()?;
+                    wav.sampling_rate = self.read_le_bytes()?;
+                    wav.data_rate = self.read_le_bytes()?;
+                    wav.data_block_size = self.read_le_bytes()?;
+                    wav.bits_per_sample = self.read_le_bytes()?;
                 },
                 // Data
                 "data" => {
-                    details.data_size = self.read_le_bytes()?;
+                    wav.data_size = self.read_le_bytes()?;
                     break
                 },
                 // Other
                 _ => {
                     let chunk_size: u32 = self.read_le_bytes()?;
                     // Add 8 and chunk_size bytes to other_size.
-                    details.other_size += 8 + chunk_size;
+                    wav.other_size += 8 + chunk_size;
                     self.seek_relative(chunk_size as i64)?;
                 },
             }
         }
 
-        Ok(details)
+        Ok(wav)
     }
 }

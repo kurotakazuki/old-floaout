@@ -105,29 +105,29 @@ impl<W: Write + ?Sized> WriteBytes<u64> for W {
 }
 
 pub trait WriteExt<T>: Write {
-    fn write_details(&mut self, details: T) -> Result<()>;
+    fn write_details(&mut self, _: T) -> Result<()>;
 }
 
 impl<W: Write> WriteExt<Wav> for BufWriter<W> {
     #[inline]
-    fn write_details(&mut self, details: Wav) -> Result<()> {
+    fn write_details(&mut self, wav: Wav) -> Result<()> {
 
         // Riff Chunk
         self.write_be_bytes("RIFF")?;
-        self.write_le_bytes(details.data_size + 4 + 8 + details.format_size + 8)?;
+        self.write_le_bytes(wav.data_size + 4 + 8 + wav.format_size + 8)?;
         self.write_be_bytes("WAVE")?;
         // Format Chunk
         self.write_be_bytes("fmt ")?;
-        self.write_le_bytes(details.format_size)?;
-        self.write_le_bytes(details.format_tag)?;
-        self.write_le_bytes(details.channels)?;
-        self.write_le_bytes(details.sampling_rate)?;
-        self.write_le_bytes(details.data_rate)?;
-        self.write_le_bytes(details.data_block_size)?;
-        self.write_le_bytes(details.bits_per_sample)?;
+        self.write_le_bytes(wav.format_size)?;
+        self.write_le_bytes(wav.format_tag)?;
+        self.write_le_bytes(wav.channels)?;
+        self.write_le_bytes(wav.sampling_rate)?;
+        self.write_le_bytes(wav.data_rate)?;
+        self.write_le_bytes(wav.data_block_size)?;
+        self.write_le_bytes(wav.bits_per_sample)?;
         // Data Chunk
         self.write_be_bytes("data")?;
-        self.write_le_bytes(details.data_size)?;
+        self.write_le_bytes(wav.data_size)?;
 
         Ok(())
     }
