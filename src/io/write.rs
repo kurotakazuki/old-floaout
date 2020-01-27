@@ -1,3 +1,4 @@
+use crate::format::bub::Bubble;
 use crate::format::wav::Wav;
 use std::io::{BufWriter, Result, Write};
 
@@ -104,14 +105,52 @@ impl<W: Write + ?Sized> WriteBytes<u64> for W {
     }
 }
 
+impl<W: Write + ?Sized> WriteBytes<Vec<Vec<Vec<u8>>>> for W {
+    #[inline]
+    fn write_be_bytes(&mut self, n: Vec<Vec<Vec<u8>>>) -> Result<()> {
+        self.write_all(&n.concat().concat()[..])
+    }
+
+    #[inline]
+    fn write_le_bytes(&mut self, n: Vec<Vec<Vec<u8>>>) -> Result<()> {
+        n.concat().concat().reverse();
+        self.write_all(&n.concat().concat()[..])
+    }
+}
+
 pub trait WriteExt<T>: Write {
     fn write_details(&mut self, _: T) -> Result<()>;
+}
+
+impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
+    #[inline]
+    fn write_details(&mut self, bubble: Bubble) -> Result<()> {
+        // Bubble
+        self.write_be_bytes("oao")?;
+        self.write_le_bytes(bubble.version)?;
+        // Bubble field
+        self.write_le_bytes(bubble.length)?;
+        self.write_le_bytes(bubble.width)?;
+        self.write_le_bytes(bubble.height)?;
+        // Color
+        self.write_le_bytes(bubble.red)?;
+        self.write_le_bytes(bubble.green)?;
+        self.write_le_bytes(bubble.blue)?;
+        // Format
+        self.write_le_bytes(bubble.blocks)?;
+        self.write_le_bytes(bubble.sampling_rate)?;
+        self.write_le_bytes(bubble.bits_per_sample)?;
+        self.write_le_bytes(bubble.name_size)?;
+        self.write_be_bytes(bubble.name)?;
+        self.write_le_bytes(bubble.overall)?;
+
+        Ok(())
+    }
 }
 
 impl<W: Write> WriteExt<Wav> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, wav: Wav) -> Result<()> {
-
         // Riff Chunk
         self.write_be_bytes("RIFF")?;
         self.write_le_bytes(wav.data_size + 4 + 8 + wav.format_size + 8)?;
