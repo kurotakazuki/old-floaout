@@ -1,5 +1,5 @@
 /// Details of the Floaout file.
-#[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Floaout {
     pub version: u8,
     pub length: u8,
@@ -10,8 +10,11 @@ pub struct Floaout {
     pub sampling_rate: u32,
     pub bits_per_sample: u16,
     pub title_size: u8,
+    pub title: String,
     pub artist_size: u8,
+    pub artist: String,
     pub lyrics_size: u16,
+    pub lyrics: String,
     pub image_code: u8,
     pub image_size: u32
 }
