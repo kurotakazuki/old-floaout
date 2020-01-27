@@ -166,7 +166,7 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
                 // Format
                 "fmt " => {
                     details.format_size = self.read_le_bytes()?;
-                    details.format_code = self.read_le_bytes()?;
+                    details.format_tag = self.read_le_bytes()?;
                     details.channels = self.read_le_bytes()?;
                     details.sampling_rate = self.read_le_bytes()?;
                     details.data_rate = self.read_le_bytes()?;

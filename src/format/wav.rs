@@ -9,7 +9,7 @@ pub struct Wav {
     pub riff_size: u32,
     // Format Chunk
     pub format_size: u32,
-    pub format_code: u16,
+    pub format_tag: u16,
     pub channels: u16,
     pub sampling_rate: u32,
     pub data_rate: u32,
@@ -25,10 +25,10 @@ impl fmt::Display for Wav {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
         write!(
             f,
-            "\n File Size( - 8 ): {} Bytes\nFormat Chunk Size: {} Bytes\n      Format Code: {}\n         Channels: {} Channels\n    Sampling Rate: {} Hz\n        Data Rate: {} kbps\n  Data Block Size: {} Bytes\n  Bits Per Sample: {} Bits\n   Wave Data Size: {} Bytes\n Other Chunk Size: {} Bytes\n",
+            "\n File Size( - 8 ): {} Bytes\nFormat Chunk Size: {} Bytes\n      Format Tag: {}\n         Channels: {} Channels\n    Sampling Rate: {} Hz\n        Data Rate: {} kbps\n  Data Block Size: {} Bytes\n  Bits Per Sample: {} Bits\n   Wave Data Size: {} Bytes\n Other Chunk Size: {} Bytes\n",
             self.riff_size,
             self.format_size,
-            self.format_code,
+            self.format_tag,
             self.channels,
             self.sampling_rate,
             self.data_rate,
@@ -54,7 +54,7 @@ impl TryFrom<Format> for Wav {
                 Self {
                     riff_size: riff_size as u32,
                     format_size: 16,
-                    format_code: 3,
+                    format_tag: 3,
                     channels: channels,
                     sampling_rate: format.sampling_rate,
                     data_rate: format.sampling_rate * (bytes_per_sample * channels) as u32,

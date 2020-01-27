@@ -119,7 +119,7 @@ impl<W: Write> WriteExt<Wav> for BufWriter<W> {
         // Format Chunk
         self.write_be_bytes("fmt ")?;
         self.write_le_bytes(details.format_size)?;
-        self.write_le_bytes(details.format_code)?;
+        self.write_le_bytes(details.format_tag)?;
         self.write_le_bytes(details.channels)?;
         self.write_le_bytes(details.sampling_rate)?;
         self.write_le_bytes(details.data_rate)?;
