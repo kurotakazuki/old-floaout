@@ -1,4 +1,5 @@
 use std::io::Seek;
+use crate::format::bub::Bubble;
 use crate::format::wav::Wav;
 use std::io::{BufReader, Read, Result};
 
@@ -106,26 +107,14 @@ impl<R: Read + ?Sized> ReadBytes<u64> for R {
     }
 }
 
-impl<R: Read + ?Sized> ReadBytes<&str> for R {
-    #[inline]
-    fn read_be_bytes(&mut self) -> Result<&str> {
-
-        Ok()
-    }
-
-    #[inline]
-    fn read_le_bytes(&mut self) -> Result<&str> {
-
-        Ok()
-    }
+pub trait ReadBytesFor<T>: Read {
+    fn read_be_bytes_for(&mut self, size: usize) -> Result<T>;
+    fn read_le_bytes_for(&mut self, size: usize) -> Result<T>;
 }
 
-
-pub trait ReadExt<T>: Read {
-    fn read_details(&mut self) -> Result<T>;
-
+impl<R: Read + ?Sized> ReadBytesFor<Vec<u8>> for R {
     #[inline]
-    fn read_for(&mut self, size: usize) -> Result<Vec<u8>> {
+    fn read_be_bytes_for(&mut self, size: usize) -> Result<Vec<u8>> {
         let mut buf = Vec::new();
         let mut bytes = [0; 1];
         for _ in 0..size {
@@ -137,11 +126,37 @@ pub trait ReadExt<T>: Read {
     }
 
     #[inline]
-    fn read_string_for(&mut self, size: usize) -> Result<String> {
-        let buf = self.read_for(size)?;
+    fn read_le_bytes_for(&mut self, size: usize) -> Result<Vec<u8>> {
+        let mut buf = Vec::new();
+        let mut bytes = [0; 1];
+        for _ in 0..size {
+            self.read_exact(&mut bytes)?;
+            buf.push(bytes[0]);
+        }
+        buf.reverse();
+
+        Ok(buf)
+    }
+}
+
+impl<R: Read + ?Sized> ReadBytesFor<String> for R {
+    #[inline]
+    fn read_be_bytes_for(&mut self, size: usize) -> Result<String> {
+        let buf: Vec<u8> = self.read_be_bytes_for(size)?;
 
         Ok(std::string::String::from_utf8(buf).unwrap())
     }
+
+    #[inline]
+    fn read_le_bytes_for(&mut self, size: usize) -> Result<String> {
+        let buf: Vec<u8> = self.read_le_bytes_for(size)?;
+
+        Ok(std::string::String::from_utf8(buf).unwrap())
+    }
+}
+
+pub trait ReadExt<T>: Read {
+    fn read_details(&mut self) -> Result<T>;
 }
 
 impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
@@ -167,6 +182,7 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
     /// ```
     #[inline]
     fn read_details(&mut self) -> Result<Wav> {
+        // Initialized
         let mut wav = Wav::default();
         // Repeat when there is a chunk.
         loop {

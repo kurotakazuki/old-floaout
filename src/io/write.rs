@@ -124,25 +124,25 @@ pub trait WriteExt<T>: Write {
 
 impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
     #[inline]
-    fn write_details(&mut self, bubble: Bubble) -> Result<()> {
+    fn write_details(&mut self, bub: Bubble) -> Result<()> {
         // Bubble
         self.write_be_bytes("oao")?;
-        self.write_le_bytes(bubble.version)?;
+        self.write_le_bytes(bub.version)?;
         // Bubble field
-        self.write_le_bytes(bubble.length)?;
-        self.write_le_bytes(bubble.width)?;
-        self.write_le_bytes(bubble.height)?;
+        self.write_le_bytes(bub.length)?;
+        self.write_le_bytes(bub.width)?;
+        self.write_le_bytes(bub.height)?;
         // Color
-        self.write_le_bytes(bubble.red)?;
-        self.write_le_bytes(bubble.green)?;
-        self.write_le_bytes(bubble.blue)?;
+        self.write_le_bytes(bub.red)?;
+        self.write_le_bytes(bub.green)?;
+        self.write_le_bytes(bub.blue)?;
         // Format
-        self.write_le_bytes(bubble.blocks)?;
-        self.write_le_bytes(bubble.sampling_rate)?;
-        self.write_le_bytes(bubble.bits_per_sample)?;
-        self.write_le_bytes(bubble.name_size)?;
-        self.write_be_bytes(bubble.name)?;
-        self.write_le_bytes(bubble.overall)?;
+        self.write_le_bytes(bub.blocks)?;
+        self.write_le_bytes(bub.sampling_rate)?;
+        self.write_le_bytes(bub.bits_per_sample)?;
+        self.write_le_bytes(bub.name_size)?;
+        self.write_be_bytes(bub.name)?;
+        self.write_le_bytes(bub.overall)?;
 
         Ok(())
     }
