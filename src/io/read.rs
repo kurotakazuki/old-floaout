@@ -106,6 +106,21 @@ impl<R: Read + ?Sized> ReadBytes<u64> for R {
     }
 }
 
+impl<R: Read + ?Sized> ReadBytes<&str> for R {
+    #[inline]
+    fn read_be_bytes(&mut self) -> Result<&str> {
+
+        Ok()
+    }
+
+    #[inline]
+    fn read_le_bytes(&mut self) -> Result<&str> {
+
+        Ok()
+    }
+}
+
+
 pub trait ReadExt<T>: Read {
     fn read_details(&mut self) -> Result<T>;
 
