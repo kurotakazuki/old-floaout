@@ -155,8 +155,53 @@ impl<R: Read + ?Sized> ReadBytesFor<String> for R {
     }
 }
 
+#[inline]
+fn read_bubble_field<R: Read + ?Sized>(this: &mut R, length: u8, width: u8, height: u8) -> Result<Vec<Vec<Vec<u8>>>> {
+    let length = 1 << length;
+    let width = 1 << width;
+    let height = 1 << height;
+    let mut bubble_field: Vec<Vec<Vec<u8>>> =  vec![vec![vec![0; height]; width]; length];
+    for height in 0..height {
+        for width in 0..width {
+            for length in 0..length {
+                bubble_field[length][width][height] = this.read_le_bytes()?;
+            }
+        }
+    }
+
+    Ok(bubble_field)
+}
+
 pub trait ReadExt<T>: Read {
     fn read_details(&mut self) -> Result<T>;
+}
+
+impl<R: Read + Seek> ReadExt<Bubble> for BufReader<R> {
+    #[inline]
+    fn read_details(&mut self) -> Result<Bubble> {
+        // Initialized
+        let mut bub = Bubble::default();
+        // Bubble
+        self.seek_relative(3)?;
+        bub.version = self.read_le_bytes()?;
+        // Bubble field
+        bub.length = self.read_le_bytes()?;
+        bub.width = self.read_le_bytes()?;
+        bub.height = self.read_le_bytes()?;
+        // Color
+        bub.red = self.read_le_bytes()?;
+        bub.green = self.read_le_bytes()?;
+        bub.blue = self.read_le_bytes()?;
+        // Format
+        bub.blocks = self.read_le_bytes()?;
+        bub.sampling_rate = self.read_le_bytes()?;
+        bub.bits_per_sample = self.read_le_bytes()?;
+        bub.name_size = self.read_le_bytes()?;
+        bub.name = self.read_be_bytes_for(bub.name_size as usize)?;
+        bub.overall = read_bubble_field(self, bub.length, bub.width, bub.height)?;
+
+        Ok(bub)
+    }
 }
 
 impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
@@ -186,7 +231,7 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
         let mut wav = Wav::default();
         // Repeat when there is a chunk.
         loop {
-            let chunk_name = self.read_string_for(4)?;
+            let chunk_name: String = self.read_be_bytes_for(4)?;
             // Allocate by chunk name.
             match &chunk_name[..] {
                 // RIFF
