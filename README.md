@@ -1,6 +1,7 @@
 # Floaout
 
-Floaout enables immersive sound.
+Floaout is the forefront audio format that enables immersive sound which takes advantage of both channel-based and object-based system.
+
 
 ## Floaout (.oao)
 | Name              | `Type` (Bytes)     | Contents                          |
