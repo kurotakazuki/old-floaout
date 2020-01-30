@@ -2,11 +2,12 @@
 
 Floaout enables immersive sound.
 
-### Floaout (.oao)
+## Floaout (.oao)
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
 | Floaout           | `str` (3)          | “oao” means Floaout               |
 | Version           | `u8` (1)           | Version of Floaout (0~255)        |
+| Song ID           | `u64` (8)          | Song ID of the file               |
 | Length            | `u8` (1)           | Length of Bubble field (2^n)      |
 | Width             | `u8` (1)           | Width of Bubble field (2^n)       |
 | Height            | `u8` (1)           | Height of Bubble field (2^n)      |
@@ -14,17 +15,7 @@ Floaout enables immersive sound.
 | Blocks            | `u64` (8)          | Number of Block                   |
 | Sampling Rate     | `u32` (4)          | Sampling Rate                     |
 | Bits Per Sample   | `u16` (2)          | Bits Per Sample                   |
-| Title Size        | `u8` (1)           | Title Size                        |
-| Title             | `String`           | Title (UTF-8)                     |
-| Artist Size       | `u8` (1)           | Artist Size                       |
-| Artist            | `String`           | Artist (UTF-8)                    |
-| Lyrics Size       | `u16` (2)          | Lyrics Size                       |
-| Lyrics            | `String`           | Lyrics (UTF-8)                    |
 | CRC-32C           | `u32` (4)          | Everything until Begin            |
-| Image Code        | `u8` (1)           | Image Code                        |
-| Image Size        | `u32` (4)          | Image Size                        |
-| Image             |                    | Image                             |
-| CRC-32C           | `u32` (4)          | Everything until previous CRC     |
 #### Each Bubble
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
@@ -46,7 +37,14 @@ Floaout enables immersive sound.
 
 i = Number of Bubbles
 
-### BubblesInFloaout
+### What's Song ID?
+
+Song ID is 8 bytes data. It links to title, artist, lyrics, image, etc.
+This ID will save the file size and enhance versatility.
+Developers also have the merit that they don't have to process title string and so on in the file and allow concentrate on audio processing.
+If Song ID is "0x0000000000000000", this means no link.
+
+#### BubblesInFloaout
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
 | Name              | `String`           | Bubble Name                       |
@@ -97,15 +95,6 @@ Blower makes extensions of Floaout(.oao) and uses extensions of Blower(.blow).
 | Blocks            | `u64` (8)          | Number of Block                   |
 | Sampling Rate     | `u32` (4)          | Sampling Rate                     |
 | Bits Per Sample   | `u16` (2)          | Bits Per Sample                   |
-| Title Size        | `u8` (1)           | Title Size                        |
-| Title             | `String`           | Title (UTF-8)                     |
-| Artist Size       | `u8` (1)           | Artist Size                       |
-| Artist            | `String`           | Artist (UTF-8)                    |
-| Lyrics Size       | `u16` (2)          | Lyrics Size                       |
-| Lyrics            | `String`           | Lyrics (UTF-8)                    |
-| Image Code        | `u8` (1)           | Image Code                        |
-| Image Size        | `u32` (4)          | Image Size                        |
-| Image             |                    | Image                             |
 
 
 ### BubblesInBlower

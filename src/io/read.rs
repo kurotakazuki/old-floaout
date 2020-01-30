@@ -233,7 +233,7 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
         loop {
             let chunk_name: String = self.read_be_bytes_for(4)?;
             // Allocate by chunk name.
-            match &chunk_name[..] {
+            match &*chunk_name {
                 // RIFF
                 "RIFF" => {
                     wav.riff_size = self.read_le_bytes()?;
