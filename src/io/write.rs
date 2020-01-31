@@ -1,5 +1,6 @@
 use crate::format::blow::Blower;
 use crate::format::bub::Bubble;
+use crate::format::oao::Floaout;
 use crate::format::wav::Wav;
 use std::io::{BufWriter, Result, Write};
 
@@ -188,6 +189,27 @@ impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
         self.write_le_bytes(bub.name_size)?;
         self.write_be_bytes(bub.name)?;
         self.write_le_bytes(bub.overall)?;
+
+        Ok(())
+    }
+}
+
+impl<W: Write> WriteExt<Floaout> for BufWriter<W> {
+    #[inline]
+    fn write_details(&mut self, oao: Floaout) -> Result<()> {
+        // Floaout
+        self.write_be_bytes("oao")?;
+        self.write_le_bytes(oao.version)?;
+        self.write_le_bytes(oao.song_id)?;
+        // Bubble field
+        self.write_le_bytes(oao.length)?;
+        self.write_le_bytes(oao.width)?;
+        self.write_le_bytes(oao.height)?;
+        // Format
+        self.write_le_bytes(oao.bubbles)?;
+        self.write_le_bytes(oao.blocks)?;
+        self.write_le_bytes(oao.sampling_rate)?;
+        self.write_le_bytes(oao.bits_per_sample)?;
 
         Ok(())
     }
