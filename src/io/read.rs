@@ -1,6 +1,7 @@
 use std::io::Seek;
 use crate::format::blow::Blower;
 use crate::format::bub::Bubble;
+use crate::format::oao::Floaout;
 use crate::format::wav::Wav;
 use std::io::{BufReader, Read, Result};
 
@@ -224,6 +225,29 @@ impl<R: Read + Seek> ReadExt<Bubble> for BufReader<R> {
         bub.overall = read_bubble_field(self, bub.length, bub.width, bub.height)?;
 
         Ok(bub)
+    }
+}
+
+impl<R: Read + Seek> ReadExt<Floaout> for BufReader<R> {
+    #[inline]
+    fn read_details(&mut self) -> Result<Floaout> {
+        // Initialized
+        let mut oao = Floaout::default();
+        // Floaout
+        self.seek_relative(4)?;
+        oao.version = self.read_le_bytes()?;
+        oao.song_id = self.read_le_bytes()?;
+        // Bubble field
+        oao.length = self.read_le_bytes()?;
+        oao.width = self.read_le_bytes()?;
+        oao.height = self.read_le_bytes()?;
+        // Format
+        oao.bubbles = self.read_le_bytes()?;
+        oao.blocks = self.read_le_bytes()?;
+        oao.sampling_rate = self.read_le_bytes()?;
+        oao.bits_per_sample = self.read_le_bytes()?;
+
+        Ok(oao)
     }
 }
 
