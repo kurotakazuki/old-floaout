@@ -1,4 +1,5 @@
 use std::io::Seek;
+use crate::format::blow::Blower;
 use crate::format::bub::Bubble;
 use crate::format::wav::Wav;
 use std::io::{BufReader, Read, Result};
@@ -174,6 +175,28 @@ fn read_bubble_field<R: Read + ?Sized>(this: &mut R, length: u8, width: u8, heig
 
 pub trait ReadExt<T>: Read {
     fn read_details(&mut self) -> Result<T>;
+}
+
+impl<R: Read + Seek> ReadExt<Blower> for BufReader<R> {
+    #[inline]
+    fn read_details(&mut self) -> Result<Blower> {
+        // Initialized
+        let mut blow = Blower::default();
+        // Blower
+        self.seek_relative(4)?;
+        blow.version = self.read_le_bytes()?;
+        // Bubble field
+        blow.length = self.read_le_bytes()?;
+        blow.width = self.read_le_bytes()?;
+        blow.height = self.read_le_bytes()?;
+        // Format
+        blow.bubbles = self.read_le_bytes()?;
+        blow.blocks = self.read_le_bytes()?;
+        blow.sampling_rate = self.read_le_bytes()?;
+        blow.bits_per_sample = self.read_le_bytes()?;
+
+        Ok(blow)
+    }
 }
 
 impl<R: Read + Seek> ReadExt<Bubble> for BufReader<R> {
