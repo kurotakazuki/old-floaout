@@ -1,10 +1,13 @@
 /// Details of the Blower file.
 #[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Blower {
+    // Blower
     pub version: u8,
+    // Bubble field
     pub length: u8,
     pub width: u8,
     pub height: u8,
+    // Format
     pub bubbles: u16,
     pub blocks: u64,
     pub sampling_rate: u32,

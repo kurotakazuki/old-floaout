@@ -62,7 +62,7 @@ impl TryInto<Wav> for Bubble {
                     data_block_size: bytes_per_sample * 1,
                     bits_per_sample: self.bits_per_sample,
                     data_size: (riff_size - 36) as u32,
-                    ..Default::default()
+                    other_size: 0
                 }
             )
         }

@@ -1,3 +1,4 @@
+use crate::format::blow::Blower;
 use crate::format::bub::Bubble;
 use crate::format::wav::Wav;
 use std::io::{BufWriter, Result, Write};
@@ -122,6 +123,26 @@ pub trait WriteExt<T>: Write {
     fn write_details(&mut self, _: T) -> Result<()>;
 }
 
+impl<W: Write> WriteExt<Blower> for BufWriter<W> {
+    #[inline]
+    fn write_details(&mut self, blow: Blower) -> Result<()> {
+        // Blower
+        self.write_be_bytes("blow")?;
+        self.write_le_bytes(blow.version)?;
+        // Bubble field
+        self.write_le_bytes(blow.length)?;
+        self.write_le_bytes(blow.width)?;
+        self.write_le_bytes(blow.height)?;
+        // Format
+        self.write_le_bytes(blow.bubbles)?;
+        self.write_le_bytes(blow.blocks)?;
+        self.write_le_bytes(blow.sampling_rate)?;
+        self.write_le_bytes(blow.bits_per_sample)?;
+
+        Ok(())
+    }
+}
+
 impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
     /// # Examples
     /// 
@@ -150,7 +171,7 @@ impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, bub: Bubble) -> Result<()> {
         // Bubble
-        self.write_be_bytes("oao")?;
+        self.write_be_bytes("bub")?;
         self.write_le_bytes(bub.version)?;
         // Bubble field
         self.write_le_bytes(bub.length)?;
