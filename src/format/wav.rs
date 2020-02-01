@@ -1,7 +1,7 @@
 use std::fmt;
 
 /// Details of the Wav file.
-#[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Wav {
     // Riff Chunk
     pub riff_size: u32,

@@ -2,7 +2,7 @@ use crate::format::wav::Wav;
 use std::convert::{TryFrom, TryInto};
 
 /// Details of the Bubble file.
-#[derive(Clone, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Bubble {
     // Bubble
     pub version: u8,

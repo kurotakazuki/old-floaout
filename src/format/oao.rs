@@ -1,7 +1,7 @@
 use crate::format::blow::Blower;
 
 /// Details of the Floaout file.
-#[derive(Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Floaout {
     // Floaout
     pub version: u8,

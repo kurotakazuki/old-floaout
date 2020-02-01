@@ -45,7 +45,7 @@ This ID will save the file size and enhance versatility.
 Developers also have the merit that they don't have to process title string and so on in the file and allow concentrate on audio processing.
 If Song ID is "0x0000000000000000", this means no link.
 
-#### BubblesInFloaout
+#### BubbleInFloaout
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
 | Name              | `String`           | Bubble Name                       |
@@ -98,10 +98,9 @@ Blower makes extensions of Floaout(.oao) and uses extensions of Blower(.blow).
 | Bits Per Sample   | `u16` (2)          | Bits Per Sample                   |
 
 
-### BubblesInBlower
+### BubbleInBlower
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
-| Name Size         | `u8`               | Bubble Name Size                  |
 | Name              | `String`           | Bubble Name                       |
 | Times             | `u32`              | Bubble Time                       |
 | Range             | `Vec<(u64, u64)>`  | (start, end)                      |
