@@ -1,5 +1,5 @@
 use std::io::Seek;
-use crate::format::blow::Blower;
+use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::Bubble;
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::Wav;
@@ -105,6 +105,26 @@ impl<R: Read + ?Sized> ReadBytes<u64> for R {
         let mut bytes = [0; 8];
         self.read_exact(&mut bytes)?;
         Ok(u64::from_le_bytes(bytes))
+    }
+}
+
+impl<R: Read + ?Sized> ReadBytes<(u64, u64)> for R {
+    #[inline]
+    fn read_be_bytes(&mut self) -> Result<(u64, u64)> {
+        let mut bytes1 = [0; 8];
+        let mut bytes2 = [0; 8];
+        self.read_exact(&mut bytes1)?;
+        self.read_exact(&mut bytes2)?;
+        Ok((u64::from_be_bytes(bytes1), u64::from_be_bytes(bytes2)))
+    }
+
+    #[inline]
+    fn read_le_bytes(&mut self) -> Result<(u64, u64)> {
+        let mut bytes1 = [0; 8];
+        let mut bytes2 = [0; 8];
+        self.read_exact(&mut bytes1)?;
+        self.read_exact(&mut bytes2)?;
+        Ok((u64::from_le_bytes(bytes1), u64::from_le_bytes(bytes2)))
     }
 }
 
@@ -305,6 +325,38 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
 
 pub trait ReadExtFor<T>: Read {
     fn read_details_for(&mut self, times: usize) -> Result<T>;
+}
+
+impl<R: Read + Seek> ReadExtFor<BubblesInBlower> for BufReader<R> {
+    #[inline]
+    fn read_details_for(&mut self, times: usize) -> Result<BubblesInBlower> {
+        // Into Vec
+        let mut vec_of_bub_in_blow: Vec<BubbleInBlower> = Vec::new();
+        for _ in 0..times {
+            // Name of Bubble
+            let name_size: u8 = self.read_le_bytes()?;
+            let name = self.read_le_bytes_for(name_size as usize)?;
+            // Times
+            let times: u32 = self.read_le_bytes()?;
+            // Ranges
+            let mut ranges: Vec<(u64, u64)> = Vec::new();
+            for _ in 0..times {
+                ranges.push(
+                    self.read_le_bytes()?
+                );
+            }
+            vec_of_bub_in_blow.push(
+                BubbleInBlower {
+                    name_size,
+                    name,
+                    times,
+                    ranges
+                }
+            );
+        }
+
+        Ok(BubblesInBlower::from(vec_of_bub_in_blow))
+    }
 }
 
 impl<R: Read + Seek> ReadExtFor<BubblesInFloaout> for BufReader<R> {
