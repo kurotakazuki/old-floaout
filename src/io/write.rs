@@ -177,8 +177,10 @@ impl<W: Write> WriteExt<BubblesInFloaout> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, bubs_in_oao: BubblesInFloaout) -> Result<()> {
         // Into Vec
-        let vec: Vec<BubbleInFloaout> = bubs_in_oao.into();
-        for bub_in_oao in vec {
+        let vec_of_bub_in_oao: Vec<BubbleInFloaout> = bubs_in_oao.into();
+        for bub_in_oao in vec_of_bub_in_oao {
+            // Name of Bubble
+            self.write_le_bytes(bub_in_oao.name_size)?;
             self.write_be_bytes(bub_in_oao.name)?;
             // Color
             self.write_le_bytes(bub_in_oao.red)?;

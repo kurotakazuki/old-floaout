@@ -1,7 +1,7 @@
 use std::io::Seek;
 use crate::format::blow::Blower;
 use crate::format::bub::Bubble;
-use crate::format::oao::Floaout;
+use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::Wav;
 use std::io::{BufReader, Read, Result};
 
@@ -300,5 +300,31 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
         }
 
         Ok(wav)
+    }
+}
+
+pub trait ReadExtFor<T>: Read {
+    fn read_details_for(&mut self, times: usize) -> Result<T>;
+}
+
+impl<R: Read + Seek> ReadExtFor<BubblesInFloaout> for BufReader<R> {
+    #[inline]
+    fn read_details_for(&mut self, times: usize) -> Result<BubblesInFloaout> {
+        // Into Vec
+        let vec_of_bub_in_oao: Vec<BubbleInFloaout> = Vec::new();
+        for _ in 0..times {
+            let name_size: u8 = self.read_le_bytes()?;
+            vec_of_bub_in_oao.push(
+                BubbleInFloaout {
+                    name_size,
+                    name: self.read_le_bytes_for(name_size as usize)?,
+                    red: self.read_le_bytes()?,
+                    green: self.read_le_bytes()?,
+                    blue: self.read_le_bytes()?,
+                }
+            );
+        }
+
+        Ok(BubblesInFloaout::from(vec_of_bub_in_oao))
     }
 }
