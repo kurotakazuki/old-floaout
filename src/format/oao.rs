@@ -32,3 +32,13 @@ impl From<Blower> for Floaout {
         }
     }
 }
+
+#[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
+pub struct BubbleInFloaout {
+    // Name of Bubble
+    pub name: String,
+    // Color
+    pub red: u8,
+    pub green: u8,
+    pub blue: u8
+}

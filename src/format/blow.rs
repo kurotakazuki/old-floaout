@@ -16,7 +16,10 @@ pub struct Blower {
 
 #[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct BubbleInBlower {
+    // Name of Bubble
     pub name: String,
+    // How many ranges are in Bubble.
     pub times: u32,
+    // Range of Bubble.
     pub range: Vec<(u64, u64)>
 }
