@@ -92,7 +92,6 @@ impl<R: Read + ?Sized> ReadBytes<u32> for R {
     }
 }
 
-
 impl<R: Read + ?Sized> ReadBytes<u64> for R {
     #[inline]
     fn read_be_bytes(&mut self) -> Result<u64> {
@@ -174,6 +173,15 @@ fn read_bubble_field<R: Read + ?Sized>(this: &mut R, length: u8, width: u8, heig
     Ok(bubble_field)
 }
 
+
+#[inline]
+fn read_assert_eq<'a, R: Read + ?Sized>(this: &mut R, s: &'a str) -> Result<()> {
+    let s2: String = this.read_be_bytes_for(s.len())?;
+    assert_eq!(s, s2);
+
+    Ok(())
+}
+
 pub trait ReadExt<T>: Read {
     fn read_details(&mut self) -> Result<T>;
 }
@@ -184,7 +192,7 @@ impl<R: Read + Seek> ReadExt<Blower> for BufReader<R> {
         // Initialized
         let mut blow = Blower::default();
         // Blower
-        self.seek_relative(4)?;
+        read_assert_eq(self, "blow")?;
         blow.version = self.read_le_bytes()?;
         // Bubble field
         blow.length = self.read_le_bytes()?;
@@ -206,7 +214,7 @@ impl<R: Read + Seek> ReadExt<Bubble> for BufReader<R> {
         // Initialized
         let mut bub = Bubble::default();
         // Bubble
-        self.seek_relative(3)?;
+        read_assert_eq(self, "bub")?;
         bub.version = self.read_le_bytes()?;
         // Bubble field
         bub.length = self.read_le_bytes()?;
@@ -234,7 +242,7 @@ impl<R: Read + Seek> ReadExt<Floaout> for BufReader<R> {
         // Initialized
         let mut oao = Floaout::default();
         // Floaout
-        self.seek_relative(4)?;
+        read_assert_eq(self, "oao")?;
         oao.version = self.read_le_bytes()?;
         oao.song_id = self.read_le_bytes()?;
         // Bubble field
@@ -284,7 +292,7 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
                 // RIFF
                 "RIFF" => {
                     wav.riff_size = self.read_le_bytes()?;
-                    self.seek_relative(4)?;
+                    read_assert_eq(self, "WAVE")?;
                 },
                 // Format
                 "fmt " => {
