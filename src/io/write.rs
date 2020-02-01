@@ -107,17 +107,20 @@ impl<W: Write + ?Sized> WriteBytes<u64> for W {
     }
 }
 
-impl<W: Write + ?Sized> WriteBytes<Vec<Vec<Vec<u8>>>> for W {
-    #[inline]
-    fn write_be_bytes(&mut self, n: Vec<Vec<Vec<u8>>>) -> Result<()> {
-        self.write_all(&n.concat().concat()[..])
+#[inline]
+fn write_bubble_field<W: Write + ?Sized>(this: &mut W, n: Vec<Vec<Vec<u8>>>, length: u8, width: u8, height: u8) -> Result<()> {
+    let length = 1 << length;
+    let width = 1 << width;
+    let height = 1 << height;
+    for height in 0..height {
+        for width in 0..width {
+            for length in 0..length {
+                this.write_le_bytes(n[length][width][height])?;
+            }
+        }
     }
 
-    #[inline]
-    fn write_le_bytes(&mut self, n: Vec<Vec<Vec<u8>>>) -> Result<()> {
-        n.concat().concat().reverse();
-        self.write_all(&n.concat().concat()[..])
-    }
+    Ok(())
 }
 
 pub trait WriteExt<T>: Write {
@@ -164,7 +167,7 @@ impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
         self.write_le_bytes(bub.bits_per_sample)?;
         self.write_le_bytes(bub.name_size)?;
         self.write_be_bytes(bub.name)?;
-        self.write_le_bytes(bub.overall)?;
+        write_bubble_field(self, bub.overall, bub.length, bub.width, bub.height)?;
 
         Ok(())
     }

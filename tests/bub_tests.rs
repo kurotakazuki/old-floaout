@@ -11,9 +11,9 @@ fn bub_details_test() -> Result<(), Box<dyn std::error::Error>> {
     // Details of Bubble that is going to be written.
     let write_bub = Bubble {
         version: 0,
-        length: 1,
+        length: 0,
         width: 1,
-        height: 1,
+        height: 2,
         red: 255,
         green: 255,
         blue: 255,
@@ -22,7 +22,7 @@ fn bub_details_test() -> Result<(), Box<dyn std::error::Error>> {
         bits_per_sample: 32,
         name_size: 3,
         name: "た".to_string(),
-        overall: vec![vec![vec![0, 1], vec![2, 3]], vec![vec![4, 5], vec![6, 7]]]
+        overall: vec![vec![vec![0, 1, 2, 3], vec![4, 5, 6, 7]]]
     };
     // Clone Bubble because it's not implementing Clone trait.
     let write_bub_clone = write_bub.clone();
@@ -52,10 +52,10 @@ fn bub_details_without_name_test() -> Result<(), Box<dyn std::error::Error>> {
         length: 1,
         width: 1,
         height: 1,
-        red: 255,
-        green: 255,
-        blue: 255,
-        blocks: 8,
+        red: 0,
+        green: 0,
+        blue: 0,
+        blocks: 0,
         sampling_rate: 44100,
         bits_per_sample: 32,
         name_size: 0,
