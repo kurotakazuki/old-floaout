@@ -260,26 +260,6 @@ impl<R: Read + Seek> ReadExt<Floaout> for BufReader<R> {
 }
 
 impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
-    /// # Examples
-    ///
-    /// ```
-    /// use std::io::BufReader;
-    /// use std::fs::File;
-    /// use floaout::format::wav::Wav;
-    /// use floaout::io::read::ReadExt;
-    /// 
-    /// fn main() -> Result<(), Box<dyn std::error::Error>> {
-    /// 
-    ///     let file = "sample.wav";
-    ///     let mut reader = BufReader::new(File::open(file)?);
-    /// 
-    ///     let a: Wav = reader.read_details()?;
-    /// 
-    ///     println!("{}", a);
-    /// 
-    ///     Ok(())
-    /// }
-    /// ```
     #[inline]
     fn read_details(&mut self) -> Result<Wav> {
         // Initialized

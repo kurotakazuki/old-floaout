@@ -145,30 +145,6 @@ impl<W: Write> WriteExt<Blower> for BufWriter<W> {
 }
 
 impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
-    /// # Examples
-    /// 
-    ///```
-    /// let bub = Bubble {
-    ///     version: 0,
-    ///     length: 1,
-    ///     width: 1,
-    ///     height: 1,
-    ///     red: 255,
-    ///     green: 255,
-    ///     blue: 255,
-    ///     blocks: 8,
-    ///     sampling_rate: 44100,
-    ///     bits_per_sample: 32,
-    ///     name_size: 5,
-    ///     name: "hello".to_string(),
-    ///     overall: vec![vec![vec![0, 1], vec![2, 3]], vec![vec![4, 5], vec![6, 7]], vec![vec![8, 9], vec![10, 11]], vec![vec![12, 13], vec![14, 15]]]
-    /// };
-    /// 
-    /// let  bub_file = "new.bub";
-    /// let mut writer = BufWriter::new(File::create(bub_file)?);
-    /// 
-    /// writer.write_details(bub)?;
-    ///```
     #[inline]
     fn write_details(&mut self, bub: Bubble) -> Result<()> {
         // Bubble
