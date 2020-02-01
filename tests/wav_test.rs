@@ -32,7 +32,7 @@ fn wav_details_test() -> Result<(), Box<dyn std::error::Error>> {
     let mut reader = BufReader::new(File::open(file)?);
     let read_wav: Wav = reader.read_details()?;
 
-    assert_eq!(write_wav, read_wav);
+    assert_eq!(read_wav, write_wav);
 
     Ok(())
 }

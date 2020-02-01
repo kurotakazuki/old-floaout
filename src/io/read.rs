@@ -162,9 +162,9 @@ fn read_bubble_field<R: Read + ?Sized>(this: &mut R, length: u8, width: u8, heig
     let width = 1 << width;
     let height = 1 << height;
     let mut bubble_field: Vec<Vec<Vec<u8>>> =  vec![vec![vec![0; height]; width]; length];
-    for height in 0..height {
+    for length in 0..length {
         for width in 0..width {
-            for length in 0..length {
+            for height in 0..height {
                 bubble_field[length][width][height] = this.read_le_bytes()?;
             }
         }
