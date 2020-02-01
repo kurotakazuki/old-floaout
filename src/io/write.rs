@@ -1,6 +1,6 @@
 use crate::format::blow::Blower;
 use crate::format::bub::Bubble;
-use crate::format::oao::Floaout;
+use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::Wav;
 use std::io::{BufWriter, Result, Write};
 
@@ -168,6 +168,23 @@ impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
         self.write_le_bytes(bub.name_size)?;
         self.write_be_bytes(bub.name)?;
         write_bubble_field(self, bub.overall, bub.length, bub.width, bub.height)?;
+
+        Ok(())
+    }
+}
+
+impl<W: Write> WriteExt<BubblesInFloaout> for BufWriter<W> {
+    #[inline]
+    fn write_details(&mut self, bubs_in_oao: BubblesInFloaout) -> Result<()> {
+        // Into Vec
+        let vec: Vec<BubbleInFloaout> = bubs_in_oao.into();
+        for bub_in_oao in vec {
+            self.write_be_bytes(bub_in_oao.name)?;
+            // Color
+            self.write_le_bytes(bub_in_oao.red)?;
+            self.write_le_bytes(bub_in_oao.green)?;
+            self.write_le_bytes(bub_in_oao.blue)?;
+        }
 
         Ok(())
     }

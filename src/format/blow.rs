@@ -23,3 +23,6 @@ pub struct BubbleInBlower {
     // Range of Bubble.
     pub range: Vec<(u64, u64)>
 }
+
+#[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
+pub struct BubblesInBlower(Vec<BubbleInBlower>);

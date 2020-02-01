@@ -42,3 +42,18 @@ pub struct BubbleInFloaout {
     pub green: u8,
     pub blue: u8
 }
+
+#[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
+pub struct BubblesInFloaout(Vec<BubbleInFloaout>);
+
+impl From<Vec<BubbleInFloaout>> for BubblesInFloaout {
+    fn from(value: Vec<BubbleInFloaout>) -> Self {
+        BubblesInFloaout(value)
+    }
+}
+
+impl Into<Vec<BubbleInFloaout>> for BubblesInFloaout {
+    fn into(self) -> Vec<BubbleInFloaout> {
+        self.0 as Vec<BubbleInFloaout>
+    }
+}
