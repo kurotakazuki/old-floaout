@@ -1,5 +1,3 @@
-extern crate floaout;
-
 use std::io::{BufReader, BufWriter};
 use std::fs::File;
 use floaout::format::wav::Wav;
