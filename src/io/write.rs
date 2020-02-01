@@ -1,4 +1,4 @@
-use crate::format::blow::Blower;
+use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::Bubble;
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::Wav;
@@ -107,6 +107,20 @@ impl<W: Write + ?Sized> WriteBytes<u64> for W {
     }
 }
 
+impl<W: Write + ?Sized> WriteBytes<(u64, u64)> for W {
+    #[inline]
+    fn write_be_bytes(&mut self, (n1, n2): (u64, u64)) -> Result<()> {
+        self.write_all(&n1.to_be_bytes())?;
+        self.write_all(&n2.to_be_bytes())
+    }
+
+    #[inline]
+    fn write_le_bytes(&mut self, (n1, n2): (u64, u64)) -> Result<()> {
+        self.write_all(&n1.to_le_bytes())?;
+        self.write_all(&n2.to_le_bytes())
+    }
+}
+
 #[inline]
 fn write_bubble_field<W: Write + ?Sized>(this: &mut W, n: Vec<Vec<Vec<u8>>>, length: u8, width: u8, height: u8) -> Result<()> {
     let length = 1 << length;
@@ -168,6 +182,27 @@ impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
         self.write_le_bytes(bub.name_size)?;
         self.write_be_bytes(bub.name)?;
         write_bubble_field(self, bub.overall, bub.length, bub.width, bub.height)?;
+
+        Ok(())
+    }
+}
+
+impl<W: Write> WriteExt<BubblesInBlower> for BufWriter<W> {
+    #[inline]
+    fn write_details(&mut self, bubs_in_blow: BubblesInBlower) -> Result<()> {
+        // Into Vec
+        let vec_of_bub_in_blow: Vec<BubbleInBlower> = bubs_in_blow.into();
+        for bub_in_blow in vec_of_bub_in_blow {
+            // Name of Bubble
+            self.write_le_bytes(bub_in_blow.name_size)?;
+            self.write_be_bytes(bub_in_blow.name)?;
+            // Times
+            self.write_le_bytes(bub_in_blow.times)?;
+            // Ranges
+            for range in bub_in_blow.ranges {
+                self.write_le_bytes(range)?;
+            }
+        }
 
         Ok(())
     }

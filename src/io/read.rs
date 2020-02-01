@@ -311,7 +311,7 @@ impl<R: Read + Seek> ReadExtFor<BubblesInFloaout> for BufReader<R> {
     #[inline]
     fn read_details_for(&mut self, times: usize) -> Result<BubblesInFloaout> {
         // Into Vec
-        let vec_of_bub_in_oao: Vec<BubbleInFloaout> = Vec::new();
+        let mut vec_of_bub_in_oao: Vec<BubbleInFloaout> = Vec::new();
         for _ in 0..times {
             let name_size: u8 = self.read_le_bytes()?;
             vec_of_bub_in_oao.push(

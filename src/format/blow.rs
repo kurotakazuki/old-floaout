@@ -19,11 +19,23 @@ pub struct BubbleInBlower {
     // Name of Bubble
     pub name_size: u8,
     pub name: String,
-    // How many ranges are in Bubble.
+    // Number of ranges in Bubble.
     pub times: u32,
-    // Range of Bubble.
-    pub range: Vec<(u64, u64)>
+    // Ranges of Bubble.
+    pub ranges: Vec<(u64, u64)>
 }
 
 #[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct BubblesInBlower(Vec<BubbleInBlower>);
+
+impl From<Vec<BubbleInBlower>> for BubblesInBlower {
+    fn from(value: Vec<BubbleInBlower>) -> Self {
+        BubblesInBlower(value)
+    }
+}
+
+impl Into<Vec<BubbleInBlower>> for BubblesInBlower {
+    fn into(self) -> Vec<BubbleInBlower> {
+        self.0 as Vec<BubbleInBlower>
+    }
+}

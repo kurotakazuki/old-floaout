@@ -104,8 +104,8 @@ Blower makes extensions of Floaout(.oao) and uses extensions of Blower(.blow).
 | ----------------- | ------------------ | --------------------------------- |
 | Name Size         | `u8` (1)           | Name Size                         |
 | Name              | `String`           | Bubble Name                       |
-| Times             | `u32`              | Bubble Time                       |
-| Range             | `Vec<(u64, u64)>`  | (start, end)                      |
+| Times             | `u32`              | Number of ranges in Bubble        |
+| Ranges            | `Vec<(u64, u64)>`  | (start, end)                      |
 
 
 ## Pop
