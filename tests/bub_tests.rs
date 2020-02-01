@@ -1,5 +1,5 @@
 use std::io::{BufReader, BufWriter};
-use std::fs::File;
+use std::fs::{File, remove_file};
 use floaout::format::bub::Bubble;
 use floaout::io::read::ReadExt;
 use floaout::io::write::WriteExt;
@@ -37,6 +37,8 @@ fn bub_details_test() -> Result<(), Box<dyn std::error::Error>> {
 
     assert_eq!(read_bub, write_bub);
 
+    remove_file(file)?;
+
     Ok(())
 }
 
@@ -72,6 +74,8 @@ fn bub_details_without_name_test() -> Result<(), Box<dyn std::error::Error>> {
     let read_bub: Bubble = reader.read_details()?;
 
     assert_eq!(read_bub, write_bub);
+
+    remove_file(file)?;
 
     Ok(())
 }

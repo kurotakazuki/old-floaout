@@ -1,5 +1,5 @@
 use std::io::{BufReader, BufWriter};
-use std::fs::File;
+use std::fs::{File, remove_file};
 use floaout::format::wav::Wav;
 use floaout::io::read::ReadExt;
 use floaout::io::write::WriteExt;
@@ -31,6 +31,8 @@ fn wav_details_test() -> Result<(), Box<dyn std::error::Error>> {
     let read_wav: Wav = reader.read_details()?;
 
     assert_eq!(read_wav, write_wav);
+
+    remove_file(file)?;
 
     Ok(())
 }
