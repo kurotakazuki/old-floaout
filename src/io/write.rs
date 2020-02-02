@@ -306,7 +306,7 @@ pub trait WriteBubsIn<T>: Write {
     /// fn main() -> io::Result<()> {
     ///     let mut writer = io::BufWriter::new(File::create("foo.oao")?);
     /// 
-    ///     // read BubbleInFloaout details
+    ///     // write BubbleInFloaout details
     ///     let bubs_in_oao: BubblesInFloaout = Default::default();
     ///     writer.write_bubs_details(bubs_in_oao)?;
     /// 
