@@ -257,6 +257,7 @@ pub trait WriteFmt<T>: Write {
     /// }
     /// ```
     fn write_details(&mut self, _: T) -> Result<()>;
+    fn write_blocks(&mut self, _: T) -> Result<()>;
 }
 
 impl<W: Write> WriteFmt<Blower> for BufWriter<W> {

@@ -82,3 +82,6 @@ pub struct BubbleBlock{
     /// Bubble field
     bub_field: BubbleField
 }
+
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
+pub struct BubbleBlocks(Box<[BubbleBlock]>);

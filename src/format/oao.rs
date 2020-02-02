@@ -85,3 +85,6 @@ impl Into<Vec<BubbleBlock>> for FloaoutBlock {
         self.0 as Vec<BubbleBlock>
     }
 }
+
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
+pub struct FloaoutBlocks(Box<[FloaoutBlock]>);

@@ -69,3 +69,6 @@ impl Into<Sample> for WavBlock {
         self.0
     }
 }
+
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
+pub struct BubbleBlocks(Box<[WavBlock]>);
