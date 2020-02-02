@@ -1,8 +1,8 @@
 use std::io::{BufReader, BufWriter};
 use std::fs::{File, remove_file};
 use floaout::format::bub::Bubble;
-use floaout::io::read::ReadExt;
-use floaout::io::write::WriteExt;
+use floaout::io::read::ReadFmt;
+use floaout::io::write::WriteFmt;
 
 #[test]
 fn bub_details_test() -> Result<(), Box<dyn std::error::Error>> {

@@ -6,8 +6,45 @@ use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::Wav;
 use std::io::{BufWriter, Result, Write};
 
+/// This trait writes bytes for inferring from variable.
 pub trait WriteBytes<T>: Write {
+    /// This method writes bytes in big-endian byte order.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::io::write::WriteBytes;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut f = File::open("foo.txt")?;
+    /// 
+    ///     // write u32 in big-endian byte order
+    ///     let u_32: u32 = 1;
+    ///     f.write_be_bytes(u_32)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn write_be_bytes(&mut self, _: T) -> Result<()>;
+    /// This method writes bytes in little-endian byte order.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::io::write::WriteBytes;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut f = File::open("foo.txt")?;
+    /// 
+    ///     // write u32 in little-endian byte order
+    ///     let u_32: u32 = 1;
+    ///     f.write_le_bytes(u_32)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn write_le_bytes(&mut self, _: T) -> Result<()>;
 }
 
@@ -139,11 +176,31 @@ fn write_bubble_field<W: Write + ?Sized>(this: &mut W, n: Vec<Vec<Vec<u8>>>, len
     Ok(())
 }
 
-pub trait WriteExt<T>: Write {
+/// This trait writes format's data.
+pub trait WriteFmt<T>: Write {
+    /// This method writes details of format.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::format::bub::Bubble;
+    /// use floaout::io::write::WriteFmt;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut writer = io::BufWriter::new(File::create("foo.bub")?);
+    /// 
+    ///     // write Bubble details
+    ///     let bub: Bubble = Default::default();
+    ///     writer.write_details(bub)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn write_details(&mut self, _: T) -> Result<()>;
 }
 
-impl<W: Write> WriteExt<Blower> for BufWriter<W> {
+impl<W: Write> WriteFmt<Blower> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, blow: Blower) -> Result<()> {
         // Blower
@@ -163,7 +220,7 @@ impl<W: Write> WriteExt<Blower> for BufWriter<W> {
     }
 }
 
-impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
+impl<W: Write> WriteFmt<Bubble> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, bub: Bubble) -> Result<()> {
         // Bubble
@@ -189,7 +246,7 @@ impl<W: Write> WriteExt<Bubble> for BufWriter<W> {
     }
 }
 
-impl<W: Write> WriteExt<BubblesInBlower> for BufWriter<W> {
+impl<W: Write> WriteFmt<BubblesInBlower> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, bubs_in_blow: BubblesInBlower) -> Result<()> {
         // Into Vec
@@ -210,7 +267,7 @@ impl<W: Write> WriteExt<BubblesInBlower> for BufWriter<W> {
     }
 }
 
-impl<W: Write> WriteExt<BubblesInFloaout> for BufWriter<W> {
+impl<W: Write> WriteFmt<BubblesInFloaout> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, bubs_in_oao: BubblesInFloaout) -> Result<()> {
         // Into Vec
@@ -229,7 +286,7 @@ impl<W: Write> WriteExt<BubblesInFloaout> for BufWriter<W> {
     }
 }
 
-impl<W: Write> WriteExt<Floaout> for BufWriter<W> {
+impl<W: Write> WriteFmt<Floaout> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, oao: Floaout) -> Result<()> {
         // Floaout
@@ -250,7 +307,7 @@ impl<W: Write> WriteExt<Floaout> for BufWriter<W> {
     }
 }
 
-impl<W: Write> WriteExt<Wav> for BufWriter<W> {
+impl<W: Write> WriteFmt<Wav> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, wav: Wav) -> Result<()> {
         // Riff Chunk

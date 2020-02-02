@@ -1,8 +1,8 @@
 use std::io::{BufReader, BufWriter};
 use std::fs::{File, remove_file};
 use floaout::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
-use floaout::io::read::{ReadExt, ReadExtFor};
-use floaout::io::write::WriteExt;
+use floaout::io::read::{ReadFmt, ReadFmtFor};
+use floaout::io::write::WriteFmt;
 
 #[test]
 fn oao_details_test() -> Result<(), Box<dyn std::error::Error>> {

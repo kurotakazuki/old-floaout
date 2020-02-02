@@ -7,8 +7,43 @@ use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::Wav;
 use std::io::{BufReader, Read, Result};
 
+/// This trait reads bytes for inferring from variable to be assigned.
 pub trait ReadBytes<T>: Read {
+    /// This method reads bytes in big-endian byte order.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::io::read::ReadBytes;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut f = File::open("foo.txt")?;
+    /// 
+    ///     // read u32 in big-endian byte order
+    ///     let u_32: u32 = f.read_be_bytes()?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn read_be_bytes(&mut self) -> Result<T>;
+    /// This method reads bytes in little-endian byte order.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::io::read::ReadBytes;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut f = File::open("foo.txt")?;
+    /// 
+    ///     // read u32 in little-endian byte order
+    ///     let u_32: u32 = f.read_le_bytes()?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn read_le_bytes(&mut self) -> Result<T>;
 }
 
@@ -130,8 +165,44 @@ impl<R: Read + ?Sized> ReadBytes<(u64, u64)> for R {
     }
 }
 
+/// This trait reads bytes for size.
+/// This is because, size is unknown in String.
 pub trait ReadBytesFor<T>: Read {
+    /// This method reads bytes in big-endian byte order.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::io::read::ReadBytesFor;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut f = File::open("foo.txt")?;
+    /// 
+    ///     // read String for size of 3 in big-endian byte order
+    ///     let string: String = f.read_be_bytes_for(3)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn read_be_bytes_for(&mut self, size: usize) -> Result<T>;
+    /// This method reads bytes in little-endian byte order.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::io::read::ReadBytesFor;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut f = File::open("foo.txt")?;
+    /// 
+    ///     // read Vec<u8> for size of 1 in little-endian byte order
+    ///     let vec_u8: Vec<u8> = f.read_le_bytes_for(1)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn read_le_bytes_for(&mut self, size: usize) -> Result<T>;
 }
 
@@ -204,11 +275,30 @@ fn read_assert_eq<'a, R: Read + ?Sized>(this: &mut R, s: &'a str) -> Result<()> 
     Ok(())
 }
 
-pub trait ReadExt<T>: Read {
+/// This trait reads format's data.
+pub trait ReadFmt<T>: Read {
+    /// This method reads details of format.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::format::bub::Bubble;
+    /// use floaout::io::read::ReadFmt;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut reader = io::BufReader::new(File::open("foo.bub")?);
+    /// 
+    ///     // read Bubble details
+    ///     let bub: Bubble = reader.read_details()?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn read_details(&mut self) -> Result<T>;
 }
 
-impl<R: Read + Seek> ReadExt<Blower> for BufReader<R> {
+impl<R: Read + Seek> ReadFmt<Blower> for BufReader<R> {
     #[inline]
     fn read_details(&mut self) -> Result<Blower> {
         // Initialized
@@ -230,7 +320,7 @@ impl<R: Read + Seek> ReadExt<Blower> for BufReader<R> {
     }
 }
 
-impl<R: Read + Seek> ReadExt<Bubble> for BufReader<R> {
+impl<R: Read + Seek> ReadFmt<Bubble> for BufReader<R> {
     #[inline]
     fn read_details(&mut self) -> Result<Bubble> {
         // Initialized
@@ -258,7 +348,7 @@ impl<R: Read + Seek> ReadExt<Bubble> for BufReader<R> {
     }
 }
 
-impl<R: Read + Seek> ReadExt<Floaout> for BufReader<R> {
+impl<R: Read + Seek> ReadFmt<Floaout> for BufReader<R> {
     #[inline]
     fn read_details(&mut self) -> Result<Floaout> {
         // Initialized
@@ -281,7 +371,7 @@ impl<R: Read + Seek> ReadExt<Floaout> for BufReader<R> {
     }
 }
 
-impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
+impl<R: Read + Seek> ReadFmt<Wav> for BufReader<R> {
     #[inline]
     fn read_details(&mut self) -> Result<Wav> {
         // Initialized
@@ -325,11 +415,30 @@ impl<R: Read + Seek> ReadExt<Wav> for BufReader<R> {
     }
 }
 
-pub trait ReadExtFor<T>: Read {
+/// This trait reads format's data for times.
+pub trait ReadFmtFor<T>: Read {
+    /// This method reads details of format for times.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::format::oao::BubblesInFloaout;
+    /// use floaout::io::read::ReadFmtFor;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut reader = io::BufReader::new(File::open("foo.oao")?);
+    /// 
+    ///     // read BubbleInFloaout details for 2 times.
+    ///     let bubs_in_oao: BubblesInFloaout = reader.read_details_for(2)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn read_details_for(&mut self, times: usize) -> Result<T>;
 }
 
-impl<R: Read + Seek> ReadExtFor<BubblesInBlower> for BufReader<R> {
+impl<R: Read + Seek> ReadFmtFor<BubblesInBlower> for BufReader<R> {
     #[inline]
     fn read_details_for(&mut self, times: usize) -> Result<BubblesInBlower> {
         // Into Vec
@@ -361,7 +470,7 @@ impl<R: Read + Seek> ReadExtFor<BubblesInBlower> for BufReader<R> {
     }
 }
 
-impl<R: Read + Seek> ReadExtFor<BubblesInFloaout> for BufReader<R> {
+impl<R: Read + Seek> ReadFmtFor<BubblesInFloaout> for BufReader<R> {
     #[inline]
     fn read_details_for(&mut self, times: usize) -> Result<BubblesInFloaout> {
         // Into Vec

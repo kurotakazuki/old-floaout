@@ -16,17 +16,17 @@ pub struct Floaout {
     pub song_id: u64,
     // Bubble field
     /// This is length of Bubble field.
-    /// ```
+    /// ```txt
     /// 2^length
     /// ```
     pub length: u8,
     /// This is width of Bubble field.
-    /// ```
+    /// ```txt
     /// 2^width
     /// ```
     pub width: u8,
     /// This is height of Bubble field.
-    /// ```
+    /// ```txt
     /// 2^height
     /// ```
     pub height: u8,
