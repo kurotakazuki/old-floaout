@@ -335,7 +335,7 @@ impl<R: Read + Seek> ReadExtFor<BubblesInBlower> for BufReader<R> {
         for _ in 0..times {
             // Name of Bubble
             let name_size: u8 = self.read_le_bytes()?;
-            let name = self.read_le_bytes_for(name_size as usize)?;
+            let name = self.read_be_bytes_for(name_size as usize)?;
             // Times
             let times: u32 = self.read_le_bytes()?;
             // Ranges
