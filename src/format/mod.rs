@@ -9,12 +9,34 @@ pub mod wav;
 
 use std::convert::TryInto;
 
-/// This structure is each value of Bubble field.
+/// This structure is value of Bubble field.
+#[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
+pub struct BubbleField(Vec<Vec<Vec<u8>>>);
+
+impl From<Vec<Vec<Vec<u8>>>> for BubbleField {
+    fn from(bubble_field: Vec<Vec<Vec<u8>>>) -> Self {
+        BubbleField(bubble_field)
+    }
+}
+
+/// This structure is each size of Bubble field.
 #[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct BubbleFieldSize {
-    length: u8,
-    width: u8,
-    height: u8
+    /// This is length of Bubble field.
+    /// ```txt
+    /// 2^length
+    /// ```
+    pub length: u8,
+    /// This is width of Bubble field.
+    /// ```txt
+    /// 2^width
+    /// ```
+    pub width: u8,
+    /// This is height of Bubble field.
+    /// ```txt
+    /// 2^height
+    /// ```
+    pub height: u8,
 }
 
 impl From<(usize, usize, usize)> for BubbleFieldSize {
