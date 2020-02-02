@@ -1,4 +1,6 @@
 //! Structures related to `Wav`
+//! 
+//! Wav is a file which is a standard audio format.
 
 use std::fmt;
 
@@ -6,18 +8,29 @@ use std::fmt;
 #[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Wav {
     // Riff Chunk
+    /// Riff Size is (file size - 8).
     pub riff_size: u32,
     // Format Chunk
+    /// Format Size
     pub format_size: u32,
+    /// Format Tag
     pub format_tag: u16,
+    /// Channels
     pub channels: u16,
+    /// Sampling Rate
     pub sampling_rate: u32,
+    /// Data Rate
     pub data_rate: u32,
+    /// Data Block Size
     pub data_block_size: u16,
+    /// Bits Per Sample 
     pub bits_per_sample: u16,
     // Data Chunk
+    /// Data Size
     pub data_size: u32,
     // Other Chunk
+    /// Other Size is not exsists in a file.
+    /// However, this will help erasing other chunk.
     pub other_size: u32
 }
 
