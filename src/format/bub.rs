@@ -6,22 +6,43 @@ use std::convert::{TryFrom, TryInto};
 /// Details of the Bubble file.
 #[derive(Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Bubble {
-    // Bubble
+    /// This is the number of `Bubble` version.
     pub version: u8,
     // Bubble field
+    /// This is length of Bubble field.
+    /// ```
+    /// 2^length
+    /// ```
     pub length: u8,
+    /// This is width of Bubble field.
+    /// ```
+    /// 2^width
+    /// ```
     pub width: u8,
+    /// This is height of Bubble field.
+    /// ```
+    /// 2^height
+    /// ```
     pub height: u8,
     // Color
+    /// Red (0~255)
     pub red: u8,
+    /// Green (0~255)
     pub green: u8,
+    /// Blue (0~255)
     pub blue: u8,
     // Format
+    /// This is number of block.
     pub blocks: u64,
+    /// Sampling Rate
     pub sampling_rate: u32,
+    /// Bits Per Sample
     pub bits_per_sample: u16,
+    /// Bubble Name Size
     pub name_size: u8,
+    /// Name of Bubble
     pub name: String,
+    /// Overall of Bubble field
     pub overall: Vec<Vec<Vec<u8>>>
 }
 

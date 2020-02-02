@@ -3,7 +3,6 @@
 /// Details of the Blower file.
 #[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Blower {
-    // Blower
     /// This is the number of `Blower` version.
     pub version: u8,
     // Bubble field

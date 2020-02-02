@@ -7,7 +7,6 @@ use crate::format::blow::Blower;
 /// Details of the Floaout file.
 #[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Floaout {
-    // Floaout
     /// This is the number of `Floaout` version.
     pub version: u8,
     /// It links to title, artist, lyrics, image, etc.
