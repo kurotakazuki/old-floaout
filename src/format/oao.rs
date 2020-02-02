@@ -61,7 +61,6 @@ impl From<Blower> for Floaout {
 /// This structure contains data about Bubble in Floaout.
 #[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct BubbleInFloaout {
-    // Name of Bubble
     /// Bubble Name Size
     pub name_size: u8,
     /// Name of Bubble
@@ -75,7 +74,7 @@ pub struct BubbleInFloaout {
     pub blue: u8
 }
 
-/// This structure covers all BubbleInFloaout in Floaout.
+/// This structure covers all 'BubbleInFloaout' in Floaout.
 #[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct BubblesInFloaout(Vec<BubbleInFloaout>);
 
