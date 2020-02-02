@@ -21,7 +21,7 @@ fn bub_details_test() -> Result<(), Box<dyn std::error::Error>> {
         sampling_rate: 44100,
         bits_per_sample: 32,
         name_size: 3,
-        name: "た".to_string(),
+        name: "た".into(),
         overall: vec![vec![vec![0, 1, 2, 3], vec![4, 5, 6, 7]]]
     };
     // Clone Bubble because it's not implementing Clone trait.
@@ -59,7 +59,7 @@ fn bub_details_without_name_test() -> Result<(), Box<dyn std::error::Error>> {
         sampling_rate: 44100,
         bits_per_sample: 32,
         name_size: 0,
-        name: "".to_string(),
+        name: "".into(),
         overall: vec![vec![vec![0, 1], vec![2, 3]], vec![vec![4, 5], vec![6, 7]]]
     };
     // Clone Bubble because it's not implementing Clone trait.

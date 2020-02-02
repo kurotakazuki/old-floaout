@@ -369,7 +369,7 @@ impl<R: Read + Seek> ReadExtFor<BubblesInFloaout> for BufReader<R> {
             vec_of_bub_in_oao.push(
                 BubbleInFloaout {
                     name_size,
-                    name: self.read_le_bytes_for(name_size as usize)?,
+                    name: self.read_be_bytes_for(name_size as usize)?,
                     red: self.read_le_bytes()?,
                     green: self.read_le_bytes()?,
                     blue: self.read_le_bytes()?,
