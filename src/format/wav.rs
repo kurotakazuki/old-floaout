@@ -1,3 +1,5 @@
+//! Structures related to `Wav`
+
 use std::fmt;
 
 /// Details of the Wav file.

@@ -1,3 +1,5 @@
+//! Structures related to `Floaout`
+
 use crate::format::blow::Blower;
 
 /// Details of the Floaout file.

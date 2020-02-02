@@ -1,4 +1,6 @@
-// Module of format
+//! Format definitions
+//! 
+//! This module contains structures related to `Blower`, `Bubble`, `Floaout` and `Wav`.
 
 pub mod blow;
 pub mod bub;

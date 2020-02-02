@@ -1,3 +1,5 @@
+//! Structures related to `Blower`
+
 /// Details of the Blower file.
 #[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Blower {

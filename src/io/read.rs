@@ -1,3 +1,5 @@
+//! Read formats
+
 use std::io::Seek;
 use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::Bubble;

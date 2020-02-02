@@ -1,3 +1,5 @@
+//! Structures related to `Bubble`
+
 use crate::format::wav::Wav;
 use std::convert::{TryFrom, TryInto};
 

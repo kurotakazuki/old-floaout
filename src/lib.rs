@@ -2,6 +2,8 @@
 //!
 //! Floaout is the forefront audio format that enables immersive sound which takes advantage of both channel-based and object-based system.
 
+#![warn(missing_docs)]
+
 // Enable to use seek_relative method.
 #![feature(bufreader_seek_relative)]
 
