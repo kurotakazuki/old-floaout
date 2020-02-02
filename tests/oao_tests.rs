@@ -22,16 +22,12 @@ fn oao_details_test() -> Result<(), Box<dyn std::error::Error>> {
     let write_bub1_in_oao = BubbleInFloaout {
         name_size: 3,
         name: "た".into(),
-        red: 255,
-        green: 255,
-        blue: 255
+        color: (255, 255, 255).into()
     };
     let write_bub2_in_oao = BubbleInFloaout {
         name_size: 0,
         name: "".into(),
-        red: 0,
-        green: 0,
-        blue: 0
+        color: (0, 0, 0).into()
     };
     let write_bubs_in_oao: BubblesInFloaout = vec!(write_bub1_in_oao, write_bub2_in_oao).into();
     // Writer

@@ -1,6 +1,6 @@
 //! Write formats
 
-use crate::format::{BubbleField, BubbleFieldSize};
+use crate::format::{BubbleField, BubbleFieldSize, Color};
 use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::Bubble;
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
@@ -51,6 +51,26 @@ pub trait WriteBytes<T>: Write {
 }
 
 // Maybe macro is better to write.
+
+impl<W: Write + ?Sized> WriteBytes<Color> for W {
+    #[inline]
+    fn write_be_bytes(&mut self, color: Color) -> Result<()> {
+        let (red, green, blue) = color.into();
+
+        self.write_all(&red.to_be_bytes())?;
+        self.write_all(&green.to_be_bytes())?;
+        self.write_all(&blue.to_be_bytes())
+    }
+
+    #[inline]
+    fn write_le_bytes(&mut self, color: Color) -> Result<()> {
+        let (red, green, blue) = color.into();
+
+        self.write_all(&red.to_le_bytes())?;
+        self.write_all(&green.to_le_bytes())?;
+        self.write_all(&blue.to_le_bytes())
+    }
+}
 
 impl<W: Write + ?Sized> WriteBytes<BubbleFieldSize> for W {
     #[inline]
@@ -248,9 +268,7 @@ impl<W: Write> WriteFmt<Bubble> for BufWriter<W> {
         // Bubble field size
         self.write_le_bytes(bub.bub_field_size)?;
         // Color
-        self.write_le_bytes(bub.red)?;
-        self.write_le_bytes(bub.green)?;
-        self.write_le_bytes(bub.blue)?;
+        self.write_le_bytes(bub.color)?;
         // Format
         self.write_le_bytes(bub.blocks)?;
         self.write_le_bytes(bub.sampling_rate)?;
@@ -362,9 +380,7 @@ impl<W: Write> WriteBubsIn<BubblesInFloaout> for BufWriter<W> {
             self.write_le_bytes(bub_in_oao.name_size)?;
             self.write_be_bytes(bub_in_oao.name)?;
             // Color
-            self.write_le_bytes(bub_in_oao.red)?;
-            self.write_le_bytes(bub_in_oao.green)?;
-            self.write_le_bytes(bub_in_oao.blue)?;
+            self.write_le_bytes(bub_in_oao.color)?;
         }
 
         Ok(())

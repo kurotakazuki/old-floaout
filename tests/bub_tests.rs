@@ -12,9 +12,7 @@ fn bub_details_test() -> Result<(), Box<dyn std::error::Error>> {
     let write_bub = Bubble {
         version: 0,
         bub_field_size: (0u8, 1u8, 2u8).into(),
-        red: 255,
-        green: 255,
-        blue: 255,
+        color: (255, 255, 255).into(),
         blocks: 8,
         sampling_rate: 44100,
         bits_per_sample: 32,
@@ -48,9 +46,7 @@ fn bub_details_without_name_test() -> Result<(), Box<dyn std::error::Error>> {
     let write_bub = Bubble {
         version: 0,
         bub_field_size: (1u8, 1u8, 1u8).into(),
-        red: 0,
-        green: 0,
-        blue: 0,
+        color: (0, 0, 0).into(),
         blocks: 0,
         sampling_rate: 44100,
         bits_per_sample: 32,

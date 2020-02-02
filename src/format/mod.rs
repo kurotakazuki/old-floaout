@@ -90,6 +90,33 @@ impl TryInto<(usize, usize, usize)> for BubbleFieldSize {
     }
 }
 
+/// This structure is color of Bubble.
+#[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
+pub struct Color{
+    /// Red (0~255)
+    pub red: u8,
+    /// Green (0~255)
+    pub green: u8,
+    /// Blue (0~255)
+    pub blue: u8
+}
+
+impl From<(u8, u8, u8)> for Color {
+    fn from((red, blue, green): (u8, u8, u8)) -> Self {
+        Self {
+            red,
+            blue,
+            green
+        }
+    }
+}
+
+impl Into<(u8, u8, u8)> for Color {
+    fn into(self) -> (u8, u8, u8) {
+        (self.red, self.green, self.blue)
+    }
+}
+
 /// This enum is type of sample format.
 /// It's related to Bits Per Sample.
 #[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]

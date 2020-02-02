@@ -1,6 +1,6 @@
 //! Structures related to `Bubble`
 
-use crate::format::{BubbleField, BubbleFieldSize};
+use crate::format::{BubbleField, BubbleFieldSize, Color};
 use crate::format::wav::Wav;
 use std::convert::{TryFrom, TryInto};
 
@@ -11,13 +11,8 @@ pub struct Bubble {
     pub version: u8,
     /// This includes length, width and height.
     pub bub_field_size: BubbleFieldSize,
-    // Color
-    /// Red (0~255)
-    pub red: u8,
-    /// Green (0~255)
-    pub green: u8,
-    /// Blue (0~255)
-    pub blue: u8,
+    /// This includes red, green, blue.
+    pub color: Color,
     // Format
     /// This is number of block.
     pub blocks: u64,

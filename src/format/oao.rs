@@ -2,7 +2,7 @@
 //! 
 //! Floaout is the forefront audio format that enables immersive sound which takes advantage of both channel-based and object-based system.
 
-use crate::format::BubbleFieldSize;
+use crate::format::{BubbleFieldSize, Color};
 use crate::format::blow::Blower;
 
 /// Details of the Floaout file.
@@ -49,13 +49,8 @@ pub struct BubbleInFloaout {
     pub name_size: u8,
     /// Name of Bubble
     pub name: String,
-    // Color
-    /// Red (0~255)
-    pub red: u8,
-    /// Green (0~255)
-    pub green: u8,
-    /// Blue (0~255)
-    pub blue: u8
+    /// This includes red, green, blue.
+    pub color: Color
 }
 
 /// This structure covers all 'BubbleInFloaout' in Floaout.

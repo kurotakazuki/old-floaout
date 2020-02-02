@@ -1,7 +1,7 @@
 //! Read formats
 
 use std::io::Seek;
-use crate::format::{BubbleField, BubbleFieldSize};
+use crate::format::{BubbleField, BubbleFieldSize, Color};
 use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::Bubble;
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
@@ -82,6 +82,42 @@ impl<R: Read + ?Sized> ReadBytes<BubbleFieldSize> for R {
                 length: u8::from_le_bytes(length),
                 width: u8::from_le_bytes(width),
                 height: u8::from_le_bytes(height)
+            }
+        )
+    }
+}
+
+impl<R: Read + ?Sized> ReadBytes<Color> for R {
+    #[inline]
+    fn read_be_bytes(&mut self) -> Result<Color> {
+        let mut red = [0; 1];
+        self.read_exact(&mut red)?;
+        let mut green = [0; 1];
+        self.read_exact(&mut green)?;
+        let mut blue = [0; 1];
+        self.read_exact(&mut blue)?;
+        Ok(
+            Color {
+                red: u8::from_be_bytes(red),
+                green: u8::from_be_bytes(green),
+                blue: u8::from_be_bytes(blue)
+            }
+        )
+    }
+
+    #[inline]
+    fn read_le_bytes(&mut self) -> Result<Color> {
+        let mut red = [0; 1];
+        self.read_exact(&mut red)?;
+        let mut green = [0; 1];
+        self.read_exact(&mut green)?;
+        let mut blue = [0; 1];
+        self.read_exact(&mut blue)?;
+        Ok(
+            Color {
+                red: u8::from_le_bytes(red),
+                green: u8::from_le_bytes(green),
+                blue: u8::from_le_bytes(blue)
             }
         )
     }
@@ -365,9 +401,7 @@ impl<R: Read + Seek> ReadFmt<Bubble> for BufReader<R> {
         // Bubble field size
         bub.bub_field_size = self.read_le_bytes()?;
         // Color
-        bub.red = self.read_le_bytes()?;
-        bub.green = self.read_le_bytes()?;
-        bub.blue = self.read_le_bytes()?;
+        bub.color = self.read_le_bytes()?;
         // Format
         bub.blocks = self.read_le_bytes()?;
         bub.sampling_rate = self.read_le_bytes()?;
@@ -511,9 +545,7 @@ impl<R: Read + Seek> ReadBubsIn<BubblesInFloaout> for BufReader<R> {
                 BubbleInFloaout {
                     name_size,
                     name: self.read_be_bytes_for(name_size as usize)?,
-                    red: self.read_le_bytes()?,
-                    green: self.read_le_bytes()?,
-                    blue: self.read_le_bytes()?,
+                    color: self.read_le_bytes()?
                 }
             );
         }
