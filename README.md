@@ -1,4 +1,5 @@
 # Floaout
+A Rust library for Floaout.
 
 Floaout is the forefront audio format that enables immersive sound which takes advantage of both channel-based and object-based system.
 
@@ -117,8 +118,11 @@ Pop is player of Floaout(.oao).
 
 * **Kazuki Kurota** - [kurotakazuki](https://github.com/kurotakazuki)
 
+## Library License
 
-## License
+- [MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE)
+
+## Format License
 
 - Except modify or derive from these formats specification, anyone can use or create these formats the way each wants.
 - these formats = { Blower, Bubble, Floaout }

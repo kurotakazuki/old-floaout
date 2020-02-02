@@ -1,7 +1,14 @@
 [package]
 name = "floaout"
 version = "0.1.0"
-authors = ["kurotakazuki"]
+authors = ["Kazuki Kurota"]
+license = "MIT OR Apache-2.0"
+description = "A brand new audio format in Rust"
+keywords = ["audio", "bub", "floaout", "oao"]
+categories = ["multimedia::audio"]
+exclude = [".gitignore"]
+readme = "README.md"
+repository = "https://github.com/kurotakazuki/floaout"
 edition = "2018"
 
 [dependencies]
