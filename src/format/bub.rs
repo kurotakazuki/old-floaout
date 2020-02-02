@@ -1,7 +1,7 @@
 //! Structures related to `Bubble`
 
 use crate::format::{BubbleField, BubbleFieldSize, Color};
-use crate::format::wav::Wav;
+use crate::format::wav::{Wav, WavBlock};
 use std::convert::{TryFrom, TryInto};
 
 /// Details of the Bubble file.
@@ -72,4 +72,13 @@ impl TryInto<Wav> for Bubble {
             )
         }
     }
+}
+
+/// Block of Bubble
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
+pub struct BubbleBlock{
+    /// Block of Wav
+    wav_block: WavBlock,
+    /// Bubble field
+    bub_field: BubbleField
 }

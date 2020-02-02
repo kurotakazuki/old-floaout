@@ -4,6 +4,7 @@
 
 use crate::format::{BubbleFieldSize, Color};
 use crate::format::blow::Blower;
+use crate::format::bub::BubbleBlock;
 
 /// Details of the Floaout file.
 #[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
@@ -66,5 +67,21 @@ impl From<Vec<BubbleInFloaout>> for BubblesInFloaout {
 impl Into<Vec<BubbleInFloaout>> for BubblesInFloaout {
     fn into(self) -> Vec<BubbleInFloaout> {
         self.0 as Vec<BubbleInFloaout>
+    }
+}
+
+/// Block of Floaout
+#[derive(Clone, Debug, PartialEq, PartialOrd)]
+pub struct FloaoutBlock(Vec<BubbleBlock>);
+
+impl From<Vec<BubbleBlock>> for FloaoutBlock {
+    fn from(value: Vec<BubbleBlock>) -> Self {
+        FloaoutBlock(value)
+    }
+}
+
+impl Into<Vec<BubbleBlock>> for FloaoutBlock {
+    fn into(self) -> Vec<BubbleBlock> {
+        self.0 as Vec<BubbleBlock>
     }
 }

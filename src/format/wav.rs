@@ -57,3 +57,15 @@ impl fmt::Display for Wav {
 /// Block of Wav
 #[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
 pub struct WavBlock(Sample);
+
+impl From<Sample> for WavBlock {
+    fn from(sample: Sample) -> Self {
+        WavBlock(sample)
+    }
+}
+
+impl Into<Sample> for WavBlock {
+    fn into(self) -> Sample {
+        self.0
+    }
+}
