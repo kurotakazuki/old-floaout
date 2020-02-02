@@ -1,10 +1,12 @@
 //! Read formats
 
 use std::io::Seek;
+use crate::format::{BubbleField, BubbleFieldSize};
 use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::Bubble;
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::Wav;
+use std::convert::TryInto;
 use std::io::{BufReader, Read, Result};
 
 /// This trait reads bytes for inferring from variable to be assigned.
@@ -48,6 +50,42 @@ pub trait ReadBytes<T>: Read {
 }
 
 // Maybe macro is better to write.
+
+impl<R: Read + ?Sized> ReadBytes<BubbleFieldSize> for R {
+    #[inline]
+    fn read_be_bytes(&mut self) -> Result<BubbleFieldSize> {
+        let mut length = [0; 1];
+        self.read_exact(&mut length)?;
+        let mut width = [0; 1];
+        self.read_exact(&mut width)?;
+        let mut height = [0; 1];
+        self.read_exact(&mut height)?;
+        Ok(
+            BubbleFieldSize {
+                length: u8::from_be_bytes(length),
+                width: u8::from_be_bytes(width),
+                height: u8::from_be_bytes(height)
+            }
+        )
+    }
+
+    #[inline]
+    fn read_le_bytes(&mut self) -> Result<BubbleFieldSize> {
+        let mut length = [0; 1];
+        self.read_exact(&mut length)?;
+        let mut width = [0; 1];
+        self.read_exact(&mut width)?;
+        let mut height = [0; 1];
+        self.read_exact(&mut height)?;
+        Ok(
+            BubbleFieldSize {
+                length: u8::from_le_bytes(length),
+                width: u8::from_le_bytes(width),
+                height: u8::from_le_bytes(height)
+            }
+        )
+    }
+}
 
 impl<R: Read + ?Sized> ReadBytes<f32> for R {
     #[inline]
@@ -250,10 +288,8 @@ impl<R: Read + ?Sized> ReadBytesFor<String> for R {
 }
 
 #[inline]
-fn read_bubble_field<R: Read + ?Sized>(this: &mut R, length: u8, width: u8, height: u8) -> Result<Vec<Vec<Vec<u8>>>> {
-    let length = 1 << length;
-    let width = 1 << width;
-    let height = 1 << height;
+fn read_bubble_field<R: Read + ?Sized>(this: &mut R, bub_field_size: BubbleFieldSize) -> Result<BubbleField> {
+    let (length, width, height) = bub_field_size.try_into().expect("failed BubbbleFieldSize into tuple");
     let mut bubble_field: Vec<Vec<Vec<u8>>> =  vec![vec![vec![0; height]; width]; length];
     for height in 0..height {
         for width in 0..width {
@@ -263,7 +299,7 @@ fn read_bubble_field<R: Read + ?Sized>(this: &mut R, length: u8, width: u8, heig
         }
     }
 
-    Ok(bubble_field)
+    Ok(bubble_field.into())
 }
 
 
@@ -306,10 +342,8 @@ impl<R: Read + Seek> ReadFmt<Blower> for BufReader<R> {
         // Blower
         read_assert_eq(self, "blow")?;
         blow.version = self.read_le_bytes()?;
-        // Bubble field
-        blow.length = self.read_le_bytes()?;
-        blow.width = self.read_le_bytes()?;
-        blow.height = self.read_le_bytes()?;
+        // Bubble field size
+        blow.bub_field_size = self.read_le_bytes()?;
         // Format
         blow.bubbles = self.read_le_bytes()?;
         blow.blocks = self.read_le_bytes()?;
@@ -328,10 +362,8 @@ impl<R: Read + Seek> ReadFmt<Bubble> for BufReader<R> {
         // Bubble
         read_assert_eq(self, "bub")?;
         bub.version = self.read_le_bytes()?;
-        // Bubble field
-        bub.length = self.read_le_bytes()?;
-        bub.width = self.read_le_bytes()?;
-        bub.height = self.read_le_bytes()?;
+        // Bubble field size
+        bub.bub_field_size = self.read_le_bytes()?;
         // Color
         bub.red = self.read_le_bytes()?;
         bub.green = self.read_le_bytes()?;
@@ -342,7 +374,7 @@ impl<R: Read + Seek> ReadFmt<Bubble> for BufReader<R> {
         bub.bits_per_sample = self.read_le_bytes()?;
         bub.name_size = self.read_le_bytes()?;
         bub.name = self.read_be_bytes_for(bub.name_size as usize)?;
-        bub.overall = read_bubble_field(self, bub.length, bub.width, bub.height)?;
+        bub.overall = read_bubble_field(self, bub.bub_field_size)?;
 
         Ok(bub)
     }
@@ -357,10 +389,8 @@ impl<R: Read + Seek> ReadFmt<Floaout> for BufReader<R> {
         read_assert_eq(self, "oao")?;
         oao.version = self.read_le_bytes()?;
         oao.song_id = self.read_le_bytes()?;
-        // Bubble field
-        oao.length = self.read_le_bytes()?;
-        oao.width = self.read_le_bytes()?;
-        oao.height = self.read_le_bytes()?;
+        // Bubble field size
+        oao.bub_field_size = self.read_le_bytes()?;
         // Format
         oao.bubbles = self.read_le_bytes()?;
         oao.blocks = self.read_le_bytes()?;

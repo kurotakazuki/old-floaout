@@ -1,9 +1,11 @@
 //! Write formats
 
+use crate::format::{BubbleField, BubbleFieldSize};
 use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::Bubble;
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::Wav;
+use std::convert::TryInto;
 use std::io::{BufWriter, Result, Write};
 
 /// This trait writes bytes for inferring from variable.
@@ -49,6 +51,26 @@ pub trait WriteBytes<T>: Write {
 }
 
 // Maybe macro is better to write.
+
+impl<W: Write + ?Sized> WriteBytes<BubbleFieldSize> for W {
+    #[inline]
+    fn write_be_bytes(&mut self, bub_field_size: BubbleFieldSize) -> Result<()> {
+        let (length, width, height) = bub_field_size.into();
+
+        self.write_all(&length.to_be_bytes())?;
+        self.write_all(&width.to_be_bytes())?;
+        self.write_all(&height.to_be_bytes())
+    }
+
+    #[inline]
+    fn write_le_bytes(&mut self, bub_field_size: BubbleFieldSize) -> Result<()> {
+        let (length, width, height) = bub_field_size.into();
+
+        self.write_all(&length.to_le_bytes())?;
+        self.write_all(&width.to_le_bytes())?;
+        self.write_all(&height.to_le_bytes())
+    }
+}
 
 impl<W: Write + ?Sized> WriteBytes<f32> for W {
     #[inline]
@@ -161,10 +183,9 @@ impl<W: Write + ?Sized> WriteBytes<(u64, u64)> for W {
 }
 
 #[inline]
-fn write_bubble_field<W: Write + ?Sized>(this: &mut W, n: Vec<Vec<Vec<u8>>>, length: u8, width: u8, height: u8) -> Result<()> {
-    let length = 1 << length;
-    let width = 1 << width;
-    let height = 1 << height;
+fn write_bubble_field<W: Write + ?Sized>(this: &mut W, bub_field: BubbleField, bub_field_size: BubbleFieldSize) -> Result<()> {
+    let (length, width, height) = bub_field_size.try_into().expect("failed BubbbleFieldSize into tuple");
+    let n: Vec<Vec<Vec<u8>>> = bub_field.into();
     for height in 0..height {
         for width in 0..width {
             for length in 0..length {
@@ -206,10 +227,8 @@ impl<W: Write> WriteFmt<Blower> for BufWriter<W> {
         // Blower
         self.write_be_bytes("blow")?;
         self.write_le_bytes(blow.version)?;
-        // Bubble field
-        self.write_le_bytes(blow.length)?;
-        self.write_le_bytes(blow.width)?;
-        self.write_le_bytes(blow.height)?;
+        // Bubble field size
+        self.write_le_bytes(blow.bub_field_size)?;
         // Format
         self.write_le_bytes(blow.bubbles)?;
         self.write_le_bytes(blow.blocks)?;
@@ -226,10 +245,8 @@ impl<W: Write> WriteFmt<Bubble> for BufWriter<W> {
         // Bubble
         self.write_be_bytes("bub")?;
         self.write_le_bytes(bub.version)?;
-        // Bubble field
-        self.write_le_bytes(bub.length)?;
-        self.write_le_bytes(bub.width)?;
-        self.write_le_bytes(bub.height)?;
+        // Bubble field size
+        self.write_le_bytes(bub.bub_field_size)?;
         // Color
         self.write_le_bytes(bub.red)?;
         self.write_le_bytes(bub.green)?;
@@ -240,7 +257,7 @@ impl<W: Write> WriteFmt<Bubble> for BufWriter<W> {
         self.write_le_bytes(bub.bits_per_sample)?;
         self.write_le_bytes(bub.name_size)?;
         self.write_be_bytes(bub.name)?;
-        write_bubble_field(self, bub.overall, bub.length, bub.width, bub.height)?;
+        write_bubble_field(self, bub.overall, bub.bub_field_size)?;
 
         Ok(())
     }
@@ -253,10 +270,8 @@ impl<W: Write> WriteFmt<Floaout> for BufWriter<W> {
         self.write_be_bytes("oao")?;
         self.write_le_bytes(oao.version)?;
         self.write_le_bytes(oao.song_id)?;
-        // Bubble field
-        self.write_le_bytes(oao.length)?;
-        self.write_le_bytes(oao.width)?;
-        self.write_le_bytes(oao.height)?;
+        // Bubble field size
+        self.write_le_bytes(oao.bub_field_size)?;
         // Format
         self.write_le_bytes(oao.bubbles)?;
         self.write_le_bytes(oao.blocks)?;

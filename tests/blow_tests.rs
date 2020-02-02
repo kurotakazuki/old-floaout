@@ -11,9 +11,7 @@ fn blow_details_test() -> Result<(), Box<dyn std::error::Error>> {
     // Details of Blower that is going to be written.
     let write_blow = Blower {
         version: 0,
-        length: 1,
-        width: 1,
-        height: 1,
+        bub_field_size: (1u8, 1u8, 1u8).into(),
         bubbles: 2,
         blocks: 8,
         sampling_rate: 44100,

@@ -1,26 +1,14 @@
 //! Structures related to `Blower`
 
+use crate::format::BubbleFieldSize;
+
 /// Details of the Blower file.
 #[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Blower {
     /// This is the number of `Blower` version.
     pub version: u8,
-    // Bubble field
-    /// This is length of Bubble field.
-    /// ```txt
-    /// 2^length
-    /// ```
-    pub length: u8,
-    /// This is width of Bubble field.
-    /// ```txt
-    /// 2^width
-    /// ```
-    pub width: u8,
-    /// This is height of Bubble field.
-    /// ```txt
-    /// 2^height
-    /// ```
-    pub height: u8,
+    /// This includes length, width and height.
+    pub bub_field_size: BubbleFieldSize,
     // Format
     /// Number of Bubble in Floaout
     pub bubbles: u16,

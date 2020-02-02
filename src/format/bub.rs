@@ -1,5 +1,6 @@
 //! Structures related to `Bubble`
 
+use crate::format::{BubbleField, BubbleFieldSize};
 use crate::format::wav::Wav;
 use std::convert::{TryFrom, TryInto};
 
@@ -8,22 +9,8 @@ use std::convert::{TryFrom, TryInto};
 pub struct Bubble {
     /// This is the number of `Bubble` version.
     pub version: u8,
-    // Bubble field
-    /// This is length of Bubble field.
-    /// ```txt
-    /// 2^length
-    /// ```
-    pub length: u8,
-    /// This is width of Bubble field.
-    /// ```txt
-    /// 2^width
-    /// ```
-    pub width: u8,
-    /// This is height of Bubble field.
-    /// ```txt
-    /// 2^height
-    /// ```
-    pub height: u8,
+    /// This includes length, width and height.
+    pub bub_field_size: BubbleFieldSize,
     // Color
     /// Red (0~255)
     pub red: u8,
@@ -43,7 +30,7 @@ pub struct Bubble {
     /// Name of Bubble
     pub name: String,
     /// Overall of Bubble field
-    pub overall: Vec<Vec<Vec<u8>>>
+    pub overall: BubbleField
 }
 
 impl TryFrom<Wav> for Bubble {

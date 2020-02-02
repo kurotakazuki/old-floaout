@@ -2,6 +2,7 @@
 //! 
 //! Floaout is the forefront audio format that enables immersive sound which takes advantage of both channel-based and object-based system.
 
+use crate::format::BubbleFieldSize;
 use crate::format::blow::Blower;
 
 /// Details of the Floaout file.
@@ -14,22 +15,8 @@ pub struct Floaout {
     ///  Developers also have the merit that they don't have to process title string and so on in the file and allow concentrate on audio processing.
     ///  If Song ID is "0x0000000000000000", this means no link.
     pub song_id: u64,
-    // Bubble field
-    /// This is length of Bubble field.
-    /// ```txt
-    /// 2^length
-    /// ```
-    pub length: u8,
-    /// This is width of Bubble field.
-    /// ```txt
-    /// 2^width
-    /// ```
-    pub width: u8,
-    /// This is height of Bubble field.
-    /// ```txt
-    /// 2^height
-    /// ```
-    pub height: u8,
+    /// This includes length, width and height.
+    pub bub_field_size: BubbleFieldSize,
     // Format
     /// Number of Bubble in Floaout
     pub bubbles: u16,
@@ -46,9 +33,7 @@ impl From<Blower> for Floaout {
         Self {
             version: blower.version,
             song_id: 0,
-            length: blower.length,
-            width: blower.width,
-            height: blower.height,
+            bub_field_size: blower.bub_field_size,
             bubbles: blower.bubbles,
             blocks: blower.blocks,
             sampling_rate: blower.sampling_rate,

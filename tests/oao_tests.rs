@@ -12,9 +12,7 @@ fn oao_details_test() -> Result<(), Box<dyn std::error::Error>> {
     let write_oao = Floaout {
         version: 0,
         song_id: 0,
-        length: 1,
-        width: 1,
-        height: 1,
+        bub_field_size: (1u8, 1u8, 1u8).into(),
         bubbles: 2,
         blocks: 8,
         sampling_rate: 44100,

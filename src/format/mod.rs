@@ -14,8 +14,14 @@ use std::convert::TryInto;
 pub struct BubbleField(Vec<Vec<Vec<u8>>>);
 
 impl From<Vec<Vec<Vec<u8>>>> for BubbleField {
-    fn from(bubble_field: Vec<Vec<Vec<u8>>>) -> Self {
-        BubbleField(bubble_field)
+    fn from(bub_field: Vec<Vec<Vec<u8>>>) -> Self {
+        BubbleField(bub_field)
+    }
+}
+
+impl Into<Vec<Vec<Vec<u8>>>> for BubbleField {
+    fn into(self) -> Vec<Vec<Vec<u8>>> {
+        self.0
     }
 }
 
@@ -39,6 +45,23 @@ pub struct BubbleFieldSize {
     pub height: u8,
 }
 
+impl From<(u8, u8, u8)> for BubbleFieldSize {
+    fn from((length, width, height): (u8, u8, u8)) -> Self {
+        Self {
+            length,
+            width,
+            height
+        }
+    }
+}
+
+impl Into<(u8, u8, u8)> for BubbleFieldSize {
+    fn into(self) -> (u8, u8, u8) {
+        (self.length, self.width, self.height)
+    }
+}
+
+// This will change inside of number.
 impl From<(usize, usize, usize)> for BubbleFieldSize {
     fn from((length, width, height): (usize, usize, usize)) -> Self {
         Self {
@@ -49,6 +72,7 @@ impl From<(usize, usize, usize)> for BubbleFieldSize {
     }
 }
 
+// This will change inside of number.
 impl TryInto<(usize, usize, usize)> for BubbleFieldSize {
     type Error = &'static str;
 
