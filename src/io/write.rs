@@ -1,6 +1,6 @@
 //! Write formats
 
-use crate::format::{BubbleField, BubbleFieldSize, Color};
+use crate::format::{BubbleField, BubbleFieldSize, Color, Sample};
 use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::Bubble;
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
@@ -113,6 +113,24 @@ impl<W: Write + ?Sized> WriteBytes<f64> for W {
     #[inline]
     fn write_le_bytes(&mut self, n: f64) -> Result<()> {
         self.write_all(&n.to_le_bytes())
+    }
+}
+
+impl<W: Write + ?Sized> WriteBytes<Sample> for W {
+    #[inline]
+    fn write_be_bytes(&mut self, sample: Sample) -> Result<()> {
+        match sample {
+            Sample::Float32(n) => self.write_all(&n.to_be_bytes()),
+            Sample::Float64(n) => self.write_all(&n.to_be_bytes()),
+        }
+    }
+
+    #[inline]
+    fn write_le_bytes(&mut self, sample: Sample) -> Result<()> {
+        match sample {
+            Sample::Float32(n) => self.write_all(&n.to_le_bytes()),
+            Sample::Float64(n) => self.write_all(&n.to_le_bytes()),
+        }
     }
 }
 
