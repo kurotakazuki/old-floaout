@@ -16,3 +16,15 @@ pub enum Sample {
     /// This type will match, if Bits Per Sample is 64.
     Float64(f64)
 }
+
+impl From<f32> for Float32 {
+    fn from(sample: f32) -> Self {
+        Float32(sample)
+    }
+}
+
+impl From<f64> for Float64 {
+    fn from(sample: f64) -> Self {
+        Float64(sample)
+    }
+}

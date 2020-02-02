@@ -2,6 +2,7 @@
 //! 
 //! Wav is a file which is a standard audio format.
 
+use crate::format::Sample;
 use std::fmt;
 
 /// Details of the Wav file.
@@ -52,3 +53,7 @@ impl fmt::Display for Wav {
         )
     }
 }
+
+/// Block of Wav
+#[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
+pub struct WavBlock(Sample);
