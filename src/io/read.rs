@@ -275,7 +275,7 @@ fn read_assert_eq<'a, R: Read + ?Sized>(this: &mut R, s: &'a str) -> Result<()> 
     Ok(())
 }
 
-/// This trait reads format's data.
+/// This trait reads format.
 pub trait ReadFmt<T>: Read {
     /// This method reads details of format.
     /// 
@@ -415,32 +415,32 @@ impl<R: Read + Seek> ReadFmt<Wav> for BufReader<R> {
     }
 }
 
-/// This trait reads format's data for times.
-pub trait ReadFmtFor<T>: Read {
-    /// This method reads details of format for times.
+/// This trait reads Bubbles in format for times.
+pub trait ReadBubsIn<T>: Read {
+    /// This method reads details of Bubbles in format for times.
     /// 
     /// # Examples
     /// ```no_run
     /// use std::io;
     /// use std::fs::File;
     /// use floaout::format::oao::BubblesInFloaout;
-    /// use floaout::io::read::ReadFmtFor;
+    /// use floaout::io::read::ReadBubsIn;
     /// 
     /// fn main() -> io::Result<()> {
     ///     let mut reader = io::BufReader::new(File::open("foo.oao")?);
     /// 
     ///     // read BubbleInFloaout details for 2 times.
-    ///     let bubs_in_oao: BubblesInFloaout = reader.read_details_for(2)?;
+    ///     let bubs_in_oao: BubblesInFloaout = reader.read_bubs_details_for(2)?;
     /// 
     ///     Ok(())
     /// }
     /// ```
-    fn read_details_for(&mut self, times: usize) -> Result<T>;
+    fn read_bubs_details_for(&mut self, times: usize) -> Result<T>;
 }
 
-impl<R: Read + Seek> ReadFmtFor<BubblesInBlower> for BufReader<R> {
+impl<R: Read + Seek> ReadBubsIn<BubblesInBlower> for BufReader<R> {
     #[inline]
-    fn read_details_for(&mut self, times: usize) -> Result<BubblesInBlower> {
+    fn read_bubs_details_for(&mut self, times: usize) -> Result<BubblesInBlower> {
         // Into Vec
         let mut vec_of_bub_in_blow: Vec<BubbleInBlower> = Vec::new();
         for _ in 0..times {
@@ -470,9 +470,9 @@ impl<R: Read + Seek> ReadFmtFor<BubblesInBlower> for BufReader<R> {
     }
 }
 
-impl<R: Read + Seek> ReadFmtFor<BubblesInFloaout> for BufReader<R> {
+impl<R: Read + Seek> ReadBubsIn<BubblesInFloaout> for BufReader<R> {
     #[inline]
-    fn read_details_for(&mut self, times: usize) -> Result<BubblesInFloaout> {
+    fn read_bubs_details_for(&mut self, times: usize) -> Result<BubblesInFloaout> {
         // Into Vec
         let mut vec_of_bub_in_oao: Vec<BubbleInFloaout> = Vec::new();
         for _ in 0..times {

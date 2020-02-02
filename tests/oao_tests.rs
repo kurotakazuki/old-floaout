@@ -1,8 +1,8 @@
 use std::io::{BufReader, BufWriter};
 use std::fs::{File, remove_file};
 use floaout::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
-use floaout::io::read::{ReadFmt, ReadFmtFor};
-use floaout::io::write::WriteFmt;
+use floaout::io::read::{ReadFmt, ReadBubsIn};
+use floaout::io::write::{WriteFmt, WriteBubsIn};
 
 #[test]
 fn oao_details_test() -> Result<(), Box<dyn std::error::Error>> {
@@ -39,13 +39,13 @@ fn oao_details_test() -> Result<(), Box<dyn std::error::Error>> {
     // Writer
     let mut writer = BufWriter::new(File::create(file)?);
     writer.write_details(write_oao)?;
-    writer.write_details(write_bubs_in_oao.clone())?;
+    writer.write_bubs_details(write_bubs_in_oao.clone())?;
     // Finish writing.
     drop(writer);
     // Reader
     let mut reader = BufReader::new(File::open(file)?);
     let read_oao: Floaout = reader.read_details()?;
-    let read_bubs_in_oao: BubblesInFloaout = reader.read_details_for(read_oao.bubbles as usize)?;
+    let read_bubs_in_oao: BubblesInFloaout = reader.read_bubs_details_for(read_oao.bubbles as usize)?;
 
     assert_eq!(read_oao, write_oao);
     assert_eq!(read_bubs_in_oao, write_bubs_in_oao);

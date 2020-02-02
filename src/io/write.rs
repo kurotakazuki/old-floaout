@@ -176,7 +176,7 @@ fn write_bubble_field<W: Write + ?Sized>(this: &mut W, n: Vec<Vec<Vec<u8>>>, len
     Ok(())
 }
 
-/// This trait writes format's data.
+/// This trait writes format.
 pub trait WriteFmt<T>: Write {
     /// This method writes details of format.
     /// 
@@ -246,46 +246,6 @@ impl<W: Write> WriteFmt<Bubble> for BufWriter<W> {
     }
 }
 
-impl<W: Write> WriteFmt<BubblesInBlower> for BufWriter<W> {
-    #[inline]
-    fn write_details(&mut self, bubs_in_blow: BubblesInBlower) -> Result<()> {
-        // Into Vec
-        let vec_of_bub_in_blow: Vec<BubbleInBlower> = bubs_in_blow.into();
-        for bub_in_blow in vec_of_bub_in_blow {
-            // Name of Bubble
-            self.write_le_bytes(bub_in_blow.name_size)?;
-            self.write_be_bytes(bub_in_blow.name)?;
-            // Times
-            self.write_le_bytes(bub_in_blow.times)?;
-            // Ranges
-            for range in bub_in_blow.ranges {
-                self.write_le_bytes(range)?;
-            }
-        }
-
-        Ok(())
-    }
-}
-
-impl<W: Write> WriteFmt<BubblesInFloaout> for BufWriter<W> {
-    #[inline]
-    fn write_details(&mut self, bubs_in_oao: BubblesInFloaout) -> Result<()> {
-        // Into Vec
-        let vec_of_bub_in_oao: Vec<BubbleInFloaout> = bubs_in_oao.into();
-        for bub_in_oao in vec_of_bub_in_oao {
-            // Name of Bubble
-            self.write_le_bytes(bub_in_oao.name_size)?;
-            self.write_be_bytes(bub_in_oao.name)?;
-            // Color
-            self.write_le_bytes(bub_in_oao.red)?;
-            self.write_le_bytes(bub_in_oao.green)?;
-            self.write_le_bytes(bub_in_oao.blue)?;
-        }
-
-        Ok(())
-    }
-}
-
 impl<W: Write> WriteFmt<Floaout> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, oao: Floaout) -> Result<()> {
@@ -330,4 +290,68 @@ impl<W: Write> WriteFmt<Wav> for BufWriter<W> {
         Ok(())
     }
 
+}
+
+/// This trait writes Bubbles in format.
+pub trait WriteBubsIn<T>: Write {
+    /// This method writes details of Bubbles in format.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::format::oao::BubblesInFloaout;
+    /// use floaout::io::write::WriteBubsIn;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut writer = io::BufWriter::new(File::create("foo.oao")?);
+    /// 
+    ///     // read BubbleInFloaout details
+    ///     let bubs_in_oao: BubblesInFloaout = Default::default();
+    ///     writer.write_bubs_details(bubs_in_oao)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
+    fn write_bubs_details(&mut self, _: T) -> Result<()>;
+}
+
+impl<W: Write> WriteBubsIn<BubblesInBlower> for BufWriter<W> {
+    #[inline]
+    fn write_bubs_details(&mut self, bubs_in_blow: BubblesInBlower) -> Result<()> {
+        // Into Vec
+        let vec_of_bub_in_blow: Vec<BubbleInBlower> = bubs_in_blow.into();
+        for bub_in_blow in vec_of_bub_in_blow {
+            // Name of Bubble
+            self.write_le_bytes(bub_in_blow.name_size)?;
+            self.write_be_bytes(bub_in_blow.name)?;
+            // Times
+            self.write_le_bytes(bub_in_blow.times)?;
+            // Ranges
+            for range in bub_in_blow.ranges {
+                self.write_le_bytes(range)?;
+            }
+        }
+
+        Ok(())
+    }
+}
+
+impl<W: Write> WriteBubsIn<BubblesInFloaout> for BufWriter<W> {
+    #[inline]
+    fn write_bubs_details(&mut self, bubs_in_oao: BubblesInFloaout) -> Result<()> {
+        // Into Vec
+        let vec_of_bub_in_oao: Vec<BubbleInFloaout> = bubs_in_oao.into();
+        for bub_in_oao in vec_of_bub_in_oao {
+            // Name of Bubble
+            self.write_le_bytes(bub_in_oao.name_size)?;
+            self.write_be_bytes(bub_in_oao.name)?;
+            // Color
+            self.write_le_bytes(bub_in_oao.red)?;
+            self.write_le_bytes(bub_in_oao.green)?;
+            self.write_le_bytes(bub_in_oao.blue)?;
+        }
+
+        Ok(())
+    }
 }
