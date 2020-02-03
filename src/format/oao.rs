@@ -88,3 +88,15 @@ impl Into<Vec<BubbleBlock>> for FloaoutBlock {
 
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub struct FloaoutBlocks(Box<[FloaoutBlock]>);
+
+impl From<Box<[FloaoutBlock]>> for FloaoutBlocks {
+    fn from(buf: Box<[FloaoutBlock]>) -> Self {
+        FloaoutBlocks(buf)
+    }
+}
+
+impl Into<Box<[FloaoutBlock]>> for FloaoutBlocks {
+    fn into(self) -> Box<[FloaoutBlock]> {
+        self.0
+    }
+}

@@ -78,10 +78,22 @@ impl TryInto<Wav> for Bubble {
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub struct BubbleBlock{
     /// Block of Wav
-    wav_block: WavBlock,
+    pub wav_block: WavBlock,
     /// Bubble field
-    bub_field: BubbleField
+    pub bub_field: BubbleField
 }
 
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub struct BubbleBlocks(Box<[BubbleBlock]>);
+
+impl From<Box<[BubbleBlock]>> for BubbleBlocks {
+    fn from(buf: Box<[BubbleBlock]>) -> Self {
+        BubbleBlocks(buf)
+    }
+}
+
+impl Into<Box<[BubbleBlock]>> for BubbleBlocks {
+    fn into(self) -> Box<[BubbleBlock]> {
+        self.0
+    }
+}

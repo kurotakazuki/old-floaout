@@ -71,4 +71,16 @@ impl Into<Sample> for WavBlock {
 }
 
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
-pub struct BubbleBlocks(Box<[WavBlock]>);
+pub struct WavBlocks(Box<[WavBlock]>);
+
+impl From<Box<[WavBlock]>> for WavBlocks {
+    fn from(buf: Box<[WavBlock]>) -> Self {
+        WavBlocks(buf)
+    }
+}
+
+impl Into<Box<[WavBlock]>> for WavBlocks {
+    fn into(self) -> Box<[WavBlock]> {
+        self.0
+    }
+}
