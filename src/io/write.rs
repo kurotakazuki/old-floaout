@@ -1,7 +1,6 @@
 //! Write formats
 
 use crate::format::{BubbleField, BubbleFieldSize, Color, Sample};
-use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::{Bubble, BubbleBlock, BubbleBlocks}; 
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout, FloaoutBlock, FloaoutBlocks};
 use crate::format::wav::{Wav, WavBlock, WavBlocks};
@@ -279,25 +278,6 @@ pub trait WriteFmt<T, B>: Write {
     fn write_blocks(&mut self, _: T, _: B) -> Result<()>;
 }
 
-impl<W: Write> WriteFmt<Blower, FloaoutBlocks> for BufWriter<W> {
-    #[inline]
-    fn write_details(&mut self, blow: Blower) -> Result<()> {
-        // Blower
-        self.write_be_bytes("blow")?;
-        self.write_le_bytes(blow.version)?;
-        // Bubble field size
-        self.write_le_bytes(blow.bub_field_size)?;
-        // Format
-        self.write_le_bytes(blow.bubbles)?;
-        self.write_le_bytes(blow.blocks)?;
-        self.write_le_bytes(blow.sampling_rate)?;
-        self.write_le_bytes(blow.bits_per_sample)?;
-
-        Ok(())
-    }
-fn write_blocks(&mut self, _: T, _: B) -> std::result::Result<(), std::io::Error> { unimplemented!() }
-}
-
 impl<W: Write> WriteFmt<Bubble, BubbleBlocks> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, bub: Bubble) -> Result<()> {
@@ -415,27 +395,6 @@ pub trait WriteBubsIn<T>: Write {
     /// }
     /// ```
     fn write_bubs_details(&mut self, _: T) -> Result<()>;
-}
-
-impl<W: Write> WriteBubsIn<BubblesInBlower> for BufWriter<W> {
-    #[inline]
-    fn write_bubs_details(&mut self, bubs_in_blow: BubblesInBlower) -> Result<()> {
-        // Into Vec
-        let vec_of_bub_in_blow: Vec<BubbleInBlower> = bubs_in_blow.into();
-        for bub_in_blow in vec_of_bub_in_blow {
-            // Name of Bubble
-            self.write_le_bytes(bub_in_blow.name_size)?;
-            self.write_be_bytes(bub_in_blow.name)?;
-            // Times
-            self.write_le_bytes(bub_in_blow.times)?;
-            // Ranges
-            for range in bub_in_blow.ranges {
-                self.write_le_bytes(range)?;
-            }
-        }
-
-        Ok(())
-    }
 }
 
 impl<W: Write> WriteBubsIn<BubblesInFloaout> for BufWriter<W> {

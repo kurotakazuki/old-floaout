@@ -2,7 +2,6 @@
 
 use std::io::Seek;
 use crate::format::{BubbleField, BubbleFieldSize, Color};
-use crate::format::blow::{Blower, BubbleInBlower, BubblesInBlower};
 use crate::format::bub::Bubble;
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::Wav;
@@ -370,26 +369,6 @@ pub trait ReadFmt<T>: Read {
     fn read_details(&mut self) -> Result<T>;
 }
 
-impl<R: Read + Seek> ReadFmt<Blower> for BufReader<R> {
-    #[inline]
-    fn read_details(&mut self) -> Result<Blower> {
-        // Initialized
-        let mut blow = Blower::default();
-        // Blower
-        read_assert_eq(self, "blow")?;
-        blow.version = self.read_le_bytes()?;
-        // Bubble field size
-        blow.bub_field_size = self.read_le_bytes()?;
-        // Format
-        blow.bubbles = self.read_le_bytes()?;
-        blow.blocks = self.read_le_bytes()?;
-        blow.sampling_rate = self.read_le_bytes()?;
-        blow.bits_per_sample = self.read_le_bytes()?;
-
-        Ok(blow)
-    }
-}
-
 impl<R: Read + Seek> ReadFmt<Bubble> for BufReader<R> {
     #[inline]
     fn read_details(&mut self) -> Result<Bubble> {
@@ -500,38 +479,6 @@ pub trait ReadBubsIn<T>: Read {
     /// }
     /// ```
     fn read_bubs_details_for(&mut self, times: usize) -> Result<T>;
-}
-
-impl<R: Read + Seek> ReadBubsIn<BubblesInBlower> for BufReader<R> {
-    #[inline]
-    fn read_bubs_details_for(&mut self, times: usize) -> Result<BubblesInBlower> {
-        // Into Vec
-        let mut vec_of_bub_in_blow: Vec<BubbleInBlower> = Vec::new();
-        for _ in 0..times {
-            // Name of Bubble
-            let name_size: u8 = self.read_le_bytes()?;
-            let name = self.read_be_bytes_for(name_size as usize)?;
-            // Times
-            let times: u32 = self.read_le_bytes()?;
-            // Ranges
-            let mut ranges: Vec<(u64, u64)> = Vec::new();
-            for _ in 0..times {
-                ranges.push(
-                    self.read_le_bytes()?
-                );
-            }
-            vec_of_bub_in_blow.push(
-                BubbleInBlower {
-                    name_size,
-                    name,
-                    times,
-                    ranges
-                }
-            );
-        }
-
-        Ok(BubblesInBlower::from(vec_of_bub_in_blow))
-    }
 }
 
 impl<R: Read + Seek> ReadBubsIn<BubblesInFloaout> for BufReader<R> {
