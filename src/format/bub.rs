@@ -1,6 +1,7 @@
 //! Structures related to `Bubble`
 
 use crate::format::{BubbleField, BubbleFieldSize, Color};
+use crate::format::oao::Floaout;
 use crate::format::wav::{Wav, WavBlock};
 use std::convert::{TryFrom, TryInto};
 
@@ -26,6 +27,18 @@ pub struct Bubble {
     pub name: String,
     /// Overall of Bubble field
     pub overall: BubbleField
+}
+
+impl From<Floaout> for Bubble {
+    fn from(oao: Floaout) -> Self {
+        Self {
+            bub_field_size: oao.bub_field_size,
+            blocks: oao.blocks,
+            sampling_rate: oao.sampling_rate,
+            bits_per_sample: oao.bits_per_sample,
+            ..Default::default()
+        }
+    }
 }
 
 impl TryFrom<Wav> for Bubble {

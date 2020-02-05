@@ -234,8 +234,18 @@ fn write_bubble_field<W: Write + ?Sized>(this: &mut W, bub_field: BubbleField, b
     Ok(())
 }
 
+/// This trait writes block.
 pub trait WriteBlock<T, B>: Write {
+    /// This method writes format block.
     fn write_block(&mut self, _: T, _: B) -> Result<()>;
+}
+
+impl<W: Write + ?Sized> WriteBlock<Bubble, BubbleBlock> for W {
+    #[inline]
+    fn write_block(&mut self, bub: Bubble, bub_block: BubbleBlock) -> Result<()> {
+        self.write_block(Wav::default(), bub_block.wav_block)?;
+        write_bubble_field(self, bub_block.bub_field, bub.bub_field_size)
+    }
 }
 
 impl<W: Write + ?Sized> WriteBlock<Wav, WavBlock> for W {
@@ -246,10 +256,16 @@ impl<W: Write + ?Sized> WriteBlock<Wav, WavBlock> for W {
     }
 }
 
-impl<W: Write + ?Sized> WriteBlock<Bubble, BubbleBlock> for W {
+impl<W: Write + ?Sized> WriteBlock<Floaout, FloaoutBlock> for W {
     #[inline]
-    fn write_block(&mut self, bub: Bubble, bub_block: BubbleBlock) -> Result<()> {
-        self.write_block(Wav::default(), bub_block.wav_block)?;
+    fn write_block(&mut self, oao: Floaout, oao_block: FloaoutBlock) -> Result<()> {
+        let bub = Bubble::from(oao);
+        let oao_block: Vec<BubbleBlock> = oao_block.into();
+        for bub_block in oao_block {
+            self.write_block(bub, bub_block)?;
+        }
+
+        Ok(())
     }
 }
 
