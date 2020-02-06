@@ -132,8 +132,26 @@ impl From<f32> for Sample {
     }
 }
 
+impl Into<f32> for Sample {
+    fn into(self) -> f32 {
+        match self {
+            Self::Float32(n) => n,
+            Self::Float64(n) => n as f32
+        }
+    }
+}
+
 impl From<f64> for Sample {
     fn from(sample: f64) -> Self {
         Sample::Float64(sample)
+    }
+}
+
+impl Into<f64> for Sample {
+    fn into(self) -> f64 {
+        match self {
+            Self::Float32(n) => n as f64,
+            Self::Float64(n) => n
+        }
     }
 }

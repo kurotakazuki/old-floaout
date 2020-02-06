@@ -2,7 +2,7 @@
 
 use crate::format::{BubbleField, BubbleFieldSize, Color, Sample};
 use crate::format::bub::{Bubble, BubbleBlock, BubbleBlocks}; 
-use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout, FloaoutBlock, FloaoutBlocks};
+use crate::format::oao::{BubblesInFloaout, Floaout, FloaoutBlock, FloaoutBlocks};
 use crate::format::wav::{Wav, WavBlock, WavBlocks};
 use std::convert::TryInto;
 use std::io::{BufWriter, Result, Write};
@@ -284,7 +284,7 @@ pub trait WriteFmt<T, B>: Write {
     /// 
     ///     // write Bubble details
     ///     let bub: Bubble = Default::default();
-    ///     writer.write_details(bub)?;
+    ///     writer.write_details(&bub)?;
     /// 
     ///     Ok(())
     /// }
@@ -402,7 +402,7 @@ pub trait WriteBubsIn<T>: Write {
     /// 
     ///     // write BubbleInFloaout details
     ///     let bubs_in_oao: BubblesInFloaout = Default::default();
-    ///     writer.write_bubs_details(bubs_in_oao)?;
+    ///     writer.write_bubs_details(&bubs_in_oao)?;
     /// 
     ///     Ok(())
     /// }
@@ -410,15 +410,13 @@ pub trait WriteBubsIn<T>: Write {
     fn write_bubs_details(&mut self, _: T) -> Result<()>;
 }
 
-impl<W: Write> WriteBubsIn<BubblesInFloaout> for BufWriter<W> {
+impl<W: Write> WriteBubsIn<&BubblesInFloaout> for BufWriter<W> {
     #[inline]
-    fn write_bubs_details(&mut self, bubs_in_oao: BubblesInFloaout) -> Result<()> {
-        // Into Vec
-        let vec_of_bub_in_oao: Vec<BubbleInFloaout> = bubs_in_oao.into();
-        for bub_in_oao in vec_of_bub_in_oao {
+    fn write_bubs_details(&mut self, bubs_in_oao: &BubblesInFloaout) -> Result<()> {
+        for bub_in_oao in &*bubs_in_oao.0 {
             // Name of Bubble
             self.write_le_bytes(bub_in_oao.name_size)?;
-            self.write_be_bytes(bub_in_oao.name)?;
+            self.write_be_bytes(bub_in_oao.name.clone())?;
             // Color
             self.write_le_bytes(bub_in_oao.color)?;
         }

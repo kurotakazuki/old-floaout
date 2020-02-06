@@ -23,7 +23,7 @@ fn wav_details_test() -> Result<(), Box<dyn std::error::Error>> {
     };
     // Writer
     let mut writer = BufWriter::new(File::create(file)?);
-    writer.write_details(write_wav)?;
+    writer.write_details(&write_wav)?;
     // Finish writing.
     drop(writer);
     // Reader

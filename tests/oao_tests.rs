@@ -32,8 +32,8 @@ fn oao_details_test() -> Result<(), Box<dyn std::error::Error>> {
     let write_bubs_in_oao: BubblesInFloaout = vec!(write_bub1_in_oao, write_bub2_in_oao).into();
     // Writer
     let mut writer = BufWriter::new(File::create(file)?);
-    writer.write_details(write_oao)?;
-    writer.write_bubs_details(write_bubs_in_oao.clone())?;
+    writer.write_details(&write_oao)?;
+    writer.write_bubs_details(&write_bubs_in_oao)?;
     // Finish writing.
     drop(writer);
     // Reader

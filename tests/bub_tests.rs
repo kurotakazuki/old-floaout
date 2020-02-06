@@ -20,11 +20,9 @@ fn bub_details_test() -> Result<(), Box<dyn std::error::Error>> {
         name: "た".into(),
         overall: vec![vec![vec![0, 1, 2, 3], vec![4, 5, 6, 7]]].into()
     };
-    // Clone Bubble because it's not implementing Clone trait.
-    let write_bub_clone = write_bub.clone();
     // Writer
     let mut writer = BufWriter::new(File::create(file)?);
-    writer.write_details(write_bub_clone)?;
+    writer.write_details(&write_bub)?;
     // Finish writing.
     drop(writer);
     // Reader
@@ -54,11 +52,9 @@ fn bub_details_without_name_test() -> Result<(), Box<dyn std::error::Error>> {
         name: "".into(),
         overall: vec![vec![vec![0, 1], vec![2, 3]], vec![vec![4, 5], vec![6, 7]]].into()
     };
-    // Clone Bubble because it's not implementing Clone trait.
-    let write_bub_clone = write_bub.clone();
     // Writer
     let mut writer = BufWriter::new(File::create(file)?);
-    writer.write_details(write_bub_clone)?;
+    writer.write_details(&write_bub)?;
     // Finish writing.
     drop(writer);
     // Reader

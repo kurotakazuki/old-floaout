@@ -40,8 +40,9 @@ pub struct BubbleInFloaout {
 }
 
 /// This structure covers all 'BubbleInFloaout' in Floaout.
+/// This block is Vec of Bubble block.
 #[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
-pub struct BubblesInFloaout(Vec<BubbleInFloaout>);
+pub struct BubblesInFloaout(pub Vec<BubbleInFloaout>);
 
 impl From<Vec<BubbleInFloaout>> for BubblesInFloaout {
     fn from(value: Vec<BubbleInFloaout>) -> Self {

@@ -58,6 +58,30 @@ impl fmt::Display for Wav {
 #[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
 pub struct WavBlock(pub Sample);
 
+impl From<f32> for WavBlock {
+    fn from(sample: f32) -> Self {
+        WavBlock(Sample::Float32(sample))
+    }
+}
+
+impl Into<f32> for WavBlock {
+    fn into(self) -> f32 {
+        (self.0).into()
+    }
+}
+
+impl From<f64> for WavBlock {
+    fn from(sample: f64) -> Self {
+        WavBlock(Sample::Float64(sample))
+    }
+}
+
+impl Into<f64> for WavBlock {
+    fn into(self) -> f64 {
+        (self.0).into()
+    }
+}
+
 impl From<Sample> for WavBlock {
     fn from(sample: Sample) -> Self {
         WavBlock(sample)
