@@ -96,6 +96,7 @@ pub struct BubbleBlock{
     pub bub_field: BubbleField
 }
 
+/// Blocks of Bubble
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub struct BubbleBlocks(Box<[BubbleBlock]>);
 

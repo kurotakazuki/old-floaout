@@ -48,3 +48,17 @@ impl Into<Vec<BubbleInBlower>> for BubblesInBlower {
         self.0 as Vec<BubbleInBlower>
     }
 }
+
+impl From<Blower> for Floaout {
+    fn from(blower: Blower) -> Self {
+        Self {
+            version: blower.version,
+            song_id: 0,
+            bub_field_size: blower.bub_field_size,
+            bubbles: blower.bubbles,
+            blocks: blower.blocks,
+            sampling_rate: blower.sampling_rate,
+            bits_per_sample: blower.bits_per_sample,
+        }
+    }
+}

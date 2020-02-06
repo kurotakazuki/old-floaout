@@ -3,7 +3,6 @@
 //! Floaout is the forefront audio format that enables immersive sound which takes advantage of both channel-based and object-based system.
 
 use crate::format::{BubbleFieldSize, Color};
-use crate::format::blow::Blower;
 use crate::format::bub::BubbleBlock;
 
 /// Details of the Floaout file.
@@ -27,20 +26,6 @@ pub struct Floaout {
     pub sampling_rate: u32,
     /// Bits Per Sample
     pub bits_per_sample: u16
-}
-
-impl From<Blower> for Floaout {
-    fn from(blower: Blower) -> Self {
-        Self {
-            version: blower.version,
-            song_id: 0,
-            bub_field_size: blower.bub_field_size,
-            bubbles: blower.bubbles,
-            blocks: blower.blocks,
-            sampling_rate: blower.sampling_rate,
-            bits_per_sample: blower.bits_per_sample,
-        }
-    }
 }
 
 /// This structure contains data about Bubble in Floaout.
@@ -71,8 +56,9 @@ impl Into<Vec<BubbleInFloaout>> for BubblesInFloaout {
 }
 
 /// Block of Floaout
+/// This block is Vec of Bubble block.
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
-pub struct FloaoutBlock(Vec<BubbleBlock>);
+pub struct FloaoutBlock(pub Vec<BubbleBlock>);
 
 impl From<Vec<BubbleBlock>> for FloaoutBlock {
     fn from(value: Vec<BubbleBlock>) -> Self {
@@ -86,6 +72,7 @@ impl Into<Vec<BubbleBlock>> for FloaoutBlock {
     }
 }
 
+/// Blocks of Floaout
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub struct FloaoutBlocks(Box<[FloaoutBlock]>);
 

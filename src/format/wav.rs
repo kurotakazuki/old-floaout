@@ -70,6 +70,7 @@ impl Into<Sample> for WavBlock {
     }
 }
 
+/// Blocks of Wav
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub struct WavBlocks(Box<[WavBlock]>);
 
