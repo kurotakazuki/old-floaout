@@ -294,9 +294,9 @@ pub trait WriteFmt<T, B>: Write {
     fn write_blocks(&mut self, _: T, _: B) -> Result<()>;
 }
 
-impl<W: Write> WriteFmt<Bubble, BubbleBlocks> for BufWriter<W> {
+impl<W: Write> WriteFmt<&Bubble, BubbleBlocks> for BufWriter<W> {
     #[inline]
-    fn write_details(&mut self, bub: Bubble) -> Result<()> {
+    fn write_details(&mut self, bub: &Bubble) -> Result<()> {
         // Bubble
         self.write_be_bytes("bub")?;
         self.write_le_bytes(bub.version)?;
@@ -309,17 +309,16 @@ impl<W: Write> WriteFmt<Bubble, BubbleBlocks> for BufWriter<W> {
         self.write_le_bytes(bub.sampling_rate)?;
         self.write_le_bytes(bub.bits_per_sample)?;
         self.write_le_bytes(bub.name_size)?;
-        self.write_be_bytes(bub.name)?;
-        write_bubble_field(self, bub.overall, bub.bub_field_size)?;
+        self.write_be_bytes(bub.name.clone())?;
+        write_bubble_field(self, bub.overall.clone(), bub.bub_field_size)?;
 
         Ok(())
     }
 
     #[inline]
-    fn write_blocks(&mut self, bub: Bubble, bub_blocks: BubbleBlocks) -> Result<()> {
-        let bub_blocks: Box<[BubbleBlock]> = bub_blocks.into();
-        for bub_block in &*bub_blocks {
-            self.write_block(&bub, bub_block)?;
+    fn write_blocks(&mut self, bub: &Bubble, bub_blocks: BubbleBlocks) -> Result<()> {
+        for bub_block in &*bub_blocks.0 {
+            self.write_block(bub, bub_block)?;
         }
 
         Ok(())
@@ -346,8 +345,7 @@ impl<W: Write> WriteFmt<&Floaout, FloaoutBlocks> for BufWriter<W> {
 
     #[inline]
     fn write_blocks(&mut self, oao: &Floaout, oao_blocks: FloaoutBlocks) -> Result<()> {
-        let oao_blocks: Box<[FloaoutBlock]> = oao_blocks.into();
-        for oao_block in &*oao_blocks {
+        for oao_block in &*oao_blocks.0 {
             self.write_block(oao, oao_block)?;
         }
 
@@ -355,9 +353,9 @@ impl<W: Write> WriteFmt<&Floaout, FloaoutBlocks> for BufWriter<W> {
     }
 }
 
-impl<W: Write> WriteFmt<Wav, WavBlocks> for BufWriter<W> {
+impl<W: Write> WriteFmt<&Wav, WavBlocks> for BufWriter<W> {
     #[inline]
-    fn write_details(&mut self, wav: Wav) -> Result<()> {
+    fn write_details(&mut self, wav: &Wav) -> Result<()> {
         // Riff Chunk
         self.write_be_bytes("RIFF")?;
         self.write_le_bytes(wav.data_size + 4 + 8 + wav.format_size + 8)?;
@@ -379,10 +377,9 @@ impl<W: Write> WriteFmt<Wav, WavBlocks> for BufWriter<W> {
     }
 
     #[inline]
-    fn write_blocks(&mut self, wav: Wav, wav_blocks: WavBlocks) -> Result<()> {
-        let wav_blocks: Box<[WavBlock]> = wav_blocks.into();
-        for wav_block in &*wav_blocks {
-            self.write_block(&wav, *wav_block)?;
+    fn write_blocks(&mut self, wav: &Wav, wav_blocks: WavBlocks) -> Result<()> {
+        for wav_block in &*wav_blocks.0 {
+            self.write_block(wav, *wav_block)?;
         }
 
         Ok(())

@@ -74,7 +74,7 @@ impl Into<Vec<BubbleBlock>> for FloaoutBlock {
 
 /// Blocks of Floaout
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
-pub struct FloaoutBlocks(Box<[FloaoutBlock]>);
+pub struct FloaoutBlocks(pub Box<[FloaoutBlock]>);
 
 impl From<Box<[FloaoutBlock]>> for FloaoutBlocks {
     fn from(buf: Box<[FloaoutBlock]>) -> Self {

@@ -90,7 +90,7 @@ impl TryInto<(usize, usize, usize)> for BubbleFieldSize {
 }
 
 /// This structure is color of Bubble.
-#[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Color{
     /// Red (0~255)
     pub red: u8,

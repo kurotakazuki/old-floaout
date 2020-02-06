@@ -56,7 +56,7 @@ impl fmt::Display for Wav {
 
 /// Block of Wav
 #[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
-pub struct WavBlock(Sample);
+pub struct WavBlock(pub Sample);
 
 impl From<Sample> for WavBlock {
     fn from(sample: Sample) -> Self {
@@ -72,7 +72,7 @@ impl Into<Sample> for WavBlock {
 
 /// Blocks of Wav
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
-pub struct WavBlocks(Box<[WavBlock]>);
+pub struct WavBlocks(pub Box<[WavBlock]>);
 
 impl From<Box<[WavBlock]>> for WavBlocks {
     fn from(buf: Box<[WavBlock]>) -> Self {

@@ -89,7 +89,7 @@ impl TryInto<Wav> for Bubble {
 
 /// Block of Bubble
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
-pub struct BubbleBlock{
+pub struct BubbleBlock {
     /// Block of Wav
     pub wav_block: WavBlock,
     /// Bubble field
@@ -98,7 +98,7 @@ pub struct BubbleBlock{
 
 /// Blocks of Bubble
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
-pub struct BubbleBlocks(Box<[BubbleBlock]>);
+pub struct BubbleBlocks(pub Box<[BubbleBlock]>);
 
 impl From<Box<[BubbleBlock]>> for BubbleBlocks {
     fn from(buf: Box<[BubbleBlock]>) -> Self {
