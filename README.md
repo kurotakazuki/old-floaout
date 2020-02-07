@@ -3,6 +3,7 @@ A Rust library for Floaout.
 
 Floaout is the forefront audio format that enables immersive sound which takes advantage of both channel-based and object-based system.
 
+Note: Floaout can build only `nightly` at this moment.
 
 ## Floaout (.oao)
 | Name              | `Type` (Bytes)     | Contents                          |
@@ -81,11 +82,6 @@ Soap makes extensions of Bubbles(.bub).
 | …                | …                    | …                                 |
 
 n = Number of Block
-
-
-## Pop
-
-Pop is player of Floaout(.oao).
 
 
 ## Developer
