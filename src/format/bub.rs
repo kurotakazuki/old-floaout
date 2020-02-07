@@ -123,6 +123,27 @@ pub struct BubbleBlock {
     pub bub_field: BubbleField
 }
 
+impl BubbleBlock {
+    /// This method casts `WavBlock` and `BubbleField` to `Bubble`.
+    /// 
+    /// # Examples
+    /// ```
+    /// use floaout::format::BubbleField;
+    /// use floaout::format::bub::{Bubble, BubbleBlock};
+    /// use floaout::format::wav::WavBlock;
+    /// 
+    /// let bub_field: BubbleField = vec![vec![vec![0], vec![2]], vec![vec![1], vec![3]]].into();
+    /// 
+    /// let bub_block = BubbleBlock::from_wav_block_and_bub_field(1.0.into(), bub_field);
+    /// ```
+    pub fn from_wav_block_and_bub_field(wav_block: WavBlock, bub_field: BubbleField) -> Self {
+        Self {
+            wav_block,
+            bub_field
+        }
+    }
+}
+
 /// Blocks of Bubble
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub struct BubbleBlocks(pub Box<[BubbleBlock]>);
