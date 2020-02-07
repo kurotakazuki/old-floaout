@@ -37,6 +37,7 @@ impl Bubble {
     /// use floaout::format::bub::Bubble;
     /// 
     /// let bub = Bubble::from_bub_field_size_and_bits_per_sample((0u8, 0u8, 0u8).into(), 32);
+    /// 
     /// assert_eq!(
     ///     bub,
     ///     Bubble {

@@ -43,6 +43,7 @@ impl Wav {
     /// use floaout::format::wav::Wav;
     /// 
     /// let wav = Wav::from_bits_per_sample(32);
+    /// 
     /// assert_eq!(
     ///     wav,
     ///     Wav {
@@ -77,7 +78,7 @@ impl Wav {
         self.bits_per_sample / 8
     }
 
-    /// This method predicts blocks from 'Wav'.
+    /// This method predicts blocks from `Wav`.
     /// 
     /// # Examples
     /// ```
