@@ -1,7 +1,7 @@
 //! Write formats
 
 use crate::format::{BubbleField, BubbleFieldSize, Color, Sample};
-use crate::format::bub::{Bubble, BubbleBlock, BubbleBlocks}; 
+use crate::format::bub::{Bubble, BubbleBlock, BubbleBlocks};
 use crate::format::oao::{BubblesInFloaout, Floaout, FloaoutBlock, FloaoutBlocks};
 use crate::format::wav::{Wav, WavBlock, WavBlocks};
 use std::convert::TryInto;

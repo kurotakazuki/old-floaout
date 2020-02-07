@@ -2,7 +2,7 @@
 
 use std::io::Seek;
 use crate::format::{BubbleField, BubbleFieldSize, Color, Sample};
-use crate::format::bub::Bubble;
+use crate::format::bub::{Bubble, BubbleBlock, BubbleBlocks};
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
 use crate::format::wav::{Wav, WavBlock, WavBlocks};
 use std::convert::TryInto;
@@ -366,6 +366,40 @@ fn read_assert_eq<'a, R: Read + ?Sized>(this: &mut R, s: &'a str) -> Result<()> 
     assert_eq!(s, s2);
 
     Ok(())
+}
+
+/// This trait reads block.
+pub trait ReadBlock<T, B>: Read {
+    /// This method reads format block.
+    fn read_block(&mut self, _: T) -> Result<B>;
+}
+
+impl<R: Read + ?Sized> ReadBlock<&Bubble, BubbleBlock> for R {
+    #[inline]
+    fn read_block(&mut self, bub: &Bubble) -> Result<BubbleBlock> {
+        let wav = Wav::from_bits_per_sample(bub.bits_per_sample);
+        let wav_block = self.read_block(&wav)?;
+        let bub_field = read_bubble_field(self, bub.bub_field_size)?;
+
+        Ok(
+            BubbleBlock {
+                wav_block,
+                bub_field
+            }
+        )
+    }
+}
+
+impl<R: Read + ?Sized> ReadBlock<&Wav, WavBlock> for R {
+    #[inline]
+    fn read_block(&mut self, wav: &Wav) -> Result<WavBlock> {
+        match wav.bits_per_sample {
+            32 => Ok(WavBlock(self.read_le_bytes_for(4)?)),
+            64 => Ok(WavBlock(self.read_le_bytes_for(8)?)),
+            // This should be change to Error type.
+            _ => Ok(WavBlock(0.0.into()))
+        }
+    }
 }
 
 /// This trait reads format.

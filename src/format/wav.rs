@@ -35,6 +35,15 @@ pub struct Wav {
     pub other_size: u32
 }
 
+impl Wav {
+    pub fn from_bits_per_sample(bits_per_sample: u16) -> Self {
+        Self {
+            bits_per_sample,
+            ..Default::default()
+        }
+    }
+}
+
 impl fmt::Display for Wav {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
         write!(
