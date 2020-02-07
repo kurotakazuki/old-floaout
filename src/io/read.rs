@@ -466,14 +466,13 @@ impl<R: Read + Seek> ReadFmt<Bubble, BubbleBlocks> for BufReader<R> {
 
     #[inline]
     fn read_blocks(&mut self, bub: &Bubble) -> Result<BubbleBlocks> {
-        let blocks = wav.blocks();
-        let mut wav_block_vec = Vec::with_capacity(blocks as usize);
-        for _ in 0..blocks {
-            let wav_block = self.read_block(wav)?;
-            wav_block_vec.push(wav_block);
+        let mut bub_block_vec = Vec::<BubbleBlock>::with_capacity(bub.blocks as usize);
+        for _ in 0..bub.blocks {
+            let bub_block = self.read_block(bub)?;
+            bub_block_vec.push(bub_block);
         }
 
-        Ok(wav_block_vec.into_boxed_slice().into())
+        Ok(bub_block_vec.into_boxed_slice().into())
     }
 }
 
@@ -498,15 +497,14 @@ impl<R: Read + Seek> ReadFmt<Floaout, FloaoutBlocks> for BufReader<R> {
     }
 
     #[inline]
-    fn read_blocks(&mut self, oao: &Floaout) -> Result<FlockBlocks> {
-        let blocks = wav.blocks();
-        let mut wav_block_vec = Vec::with_capacity(blocks as usize);
-        for _ in 0..blocks {
-            let wav_block = self.read_block(wav)?;
-            wav_block_vec.push(wav_block);
+    fn read_blocks(&mut self, oao: &Floaout) -> Result<FloaoutBlocks> {
+        let mut oao_block_vec = Vec::<FloaoutBlock>::with_capacity(oao.blocks as usize);
+        for _ in 0..oao.blocks {
+            let oao_block = self.read_block(oao)?;
+            oao_block_vec.push(oao_block);
         }
 
-        Ok(wav_block_vec.into_boxed_slice().into())
+        Ok(oao_block_vec.into_boxed_slice().into())
     }
 }
 
@@ -556,7 +554,7 @@ impl<R: Read + Seek> ReadFmt<Wav, WavBlocks> for BufReader<R> {
     #[inline]
     fn read_blocks(&mut self, wav: &Wav) -> Result<WavBlocks> {
         let blocks = wav.blocks();
-        let mut wav_block_vec = Vec::with_capacity(blocks as usize);
+        let mut wav_block_vec = Vec::<WavBlock>::with_capacity(blocks as usize);
         for _ in 0..blocks {
             let wav_block = self.read_block(wav)?;
             wav_block_vec.push(wav_block);
