@@ -417,7 +417,7 @@ impl<R: Read + ?Sized> ReadBlock<&Wav, WavBlock> for R {
 }
 
 /// This trait reads format.
-pub trait ReadFmt<T>: Read {
+pub trait ReadFmt<T, B>: Read {
     /// This method reads details of format.
     /// 
     /// # Examples
@@ -437,6 +437,8 @@ pub trait ReadFmt<T>: Read {
     /// }
     /// ```
     fn read_details(&mut self) -> Result<T>;
+    /// This method reads format blocks.
+    fn read_blocks(&mut self, _: &T) -> Result<B>;
 }
 
 impl<R: Read + Seek> ReadFmt<Bubble> for BufReader<R> {
@@ -484,7 +486,7 @@ impl<R: Read + Seek> ReadFmt<Floaout> for BufReader<R> {
     }
 }
 
-impl<R: Read + Seek> ReadFmt<Wav> for BufReader<R> {
+impl<R: Read + Seek> ReadFmt<Wav, WavBlocks> for BufReader<R> {
     #[inline]
     fn read_details(&mut self) -> Result<Wav> {
         // Initialized
@@ -525,6 +527,18 @@ impl<R: Read + Seek> ReadFmt<Wav> for BufReader<R> {
         }
 
         Ok(wav)
+    }
+
+    #[inline]
+    fn read_blocks(&mut self, wav: &Wav) -> Result<WavBlocks> {
+        let blocks = wav.blocks();
+        let mut wav_block_vec = Vec::with_capacity(blocks as usize);
+        for _ in 0..blocks {
+            let wav_block = self.read_block(wav)?;
+            wav_block_vec.push(wav_block);
+        }
+
+        Ok(wav_block_vec.into_boxed_slice().into())
     }
 }
 

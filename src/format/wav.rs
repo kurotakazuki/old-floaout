@@ -42,6 +42,15 @@ impl Wav {
             ..Default::default()
         }
     }
+
+    pub fn bytes_per_sample(self) -> u16 {
+        self.bits_per_sample / 8
+    }
+
+    /// This method predict blocks from 'Wav'.
+    pub fn blocks(self) -> u64 {
+        (self.data_size / (self.bytes_per_sample() * self.channels) as u32) as u64
+    }
 }
 
 impl fmt::Display for Wav {
