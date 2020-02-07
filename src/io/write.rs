@@ -289,12 +289,12 @@ pub trait WriteFmt<T, B>: Write {
     ///     Ok(())
     /// }
     /// ```
-    fn write_details(&mut self, _: T) -> Result<()>;
+    fn write_details(&mut self, _: &T) -> Result<()>;
     /// This method writes format blocks.
-    fn write_blocks(&mut self, _: T, _: B) -> Result<()>;
+    fn write_blocks(&mut self, _: &T, _: B) -> Result<()>;
 }
 
-impl<W: Write> WriteFmt<&Bubble, BubbleBlocks> for BufWriter<W> {
+impl<W: Write> WriteFmt<Bubble, BubbleBlocks> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, bub: &Bubble) -> Result<()> {
         // Bubble
@@ -325,7 +325,7 @@ impl<W: Write> WriteFmt<&Bubble, BubbleBlocks> for BufWriter<W> {
     }
 }
 
-impl<W: Write> WriteFmt<&Floaout, FloaoutBlocks> for BufWriter<W> {
+impl<W: Write> WriteFmt<Floaout, FloaoutBlocks> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, oao: &Floaout) -> Result<()> {
         // Floaout
@@ -353,7 +353,7 @@ impl<W: Write> WriteFmt<&Floaout, FloaoutBlocks> for BufWriter<W> {
     }
 }
 
-impl<W: Write> WriteFmt<&Wav, WavBlocks> for BufWriter<W> {
+impl<W: Write> WriteFmt<Wav, WavBlocks> for BufWriter<W> {
     #[inline]
     fn write_details(&mut self, wav: &Wav) -> Result<()> {
         // Riff Chunk

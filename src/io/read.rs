@@ -441,7 +441,7 @@ pub trait ReadFmt<T, B>: Read {
     fn read_blocks(&mut self, _: &T) -> Result<B>;
 }
 
-impl<R: Read + Seek> ReadFmt<Bubble> for BufReader<R> {
+impl<R: Read + Seek> ReadFmt<Bubble, BubbleBlocks> for BufReader<R> {
     #[inline]
     fn read_details(&mut self) -> Result<Bubble> {
         // Initialized
@@ -463,9 +463,21 @@ impl<R: Read + Seek> ReadFmt<Bubble> for BufReader<R> {
 
         Ok(bub)
     }
+
+    #[inline]
+    fn read_blocks(&mut self, bub: &Bubble) -> Result<BubbleBlocks> {
+        let blocks = wav.blocks();
+        let mut wav_block_vec = Vec::with_capacity(blocks as usize);
+        for _ in 0..blocks {
+            let wav_block = self.read_block(wav)?;
+            wav_block_vec.push(wav_block);
+        }
+
+        Ok(wav_block_vec.into_boxed_slice().into())
+    }
 }
 
-impl<R: Read + Seek> ReadFmt<Floaout> for BufReader<R> {
+impl<R: Read + Seek> ReadFmt<Floaout, FloaoutBlocks> for BufReader<R> {
     #[inline]
     fn read_details(&mut self) -> Result<Floaout> {
         // Initialized
@@ -483,6 +495,18 @@ impl<R: Read + Seek> ReadFmt<Floaout> for BufReader<R> {
         oao.bits_per_sample = self.read_le_bytes()?;
 
         Ok(oao)
+    }
+
+    #[inline]
+    fn read_blocks(&mut self, oao: &Floaout) -> Result<FlockBlocks> {
+        let blocks = wav.blocks();
+        let mut wav_block_vec = Vec::with_capacity(blocks as usize);
+        for _ in 0..blocks {
+            let wav_block = self.read_block(wav)?;
+            wav_block_vec.push(wav_block);
+        }
+
+        Ok(wav_block_vec.into_boxed_slice().into())
     }
 }
 
