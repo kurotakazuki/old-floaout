@@ -53,8 +53,8 @@ fn oao_test() -> Result<(), Box<dyn std::error::Error>> {
     let oao_block_1 = FloaoutBlock::from(vec![bub1_block_1, bub2_block_1]);
     let oao_block_2 = FloaoutBlock::from(vec![bub1_block_2, bub2_block_2]);
     // Floaout blocks
-    let oao_block_for_2 = vec![oao_block_1, oao_block_2];
-    let write_oao_blocks = FloaoutBlocks::from(oao_block_for_2.into_boxed_slice());
+    let oao_block_vec = vec![oao_block_1, oao_block_2];
+    let write_oao_blocks = FloaoutBlocks::from(oao_block_vec.into_boxed_slice());
     // Writer
     let mut writer = BufWriter::new(File::create(file)?);
     writer.write_details(&write_oao)?;

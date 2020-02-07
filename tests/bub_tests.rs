@@ -62,8 +62,8 @@ fn bub_test() -> Result<(), Box<dyn std::error::Error>> {
     let bub_block_1 = BubbleBlock::from_wav_block_and_bub_field(wav_block1, bub_field_1);
     let bub_block_2 = BubbleBlock::from_wav_block_and_bub_field(wav_block2, bub_field_2);
     // Bubble blocks
-    let bub_block_for_2 = vec![bub_block_1, bub_block_2];
-    let write_bub_blocks = BubbleBlocks::from(bub_block_for_2.into_boxed_slice());
+    let bub_block_vec = vec![bub_block_1, bub_block_2];
+    let write_bub_blocks = BubbleBlocks::from(bub_block_vec.into_boxed_slice());
     // Writer
     let mut writer = BufWriter::new(File::create(file)?);
     writer.write_details(&write_bub)?;

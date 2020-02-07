@@ -371,6 +371,24 @@ fn read_assert_eq<'a, R: Read + ?Sized>(this: &mut R, s: &'a str) -> Result<()> 
 /// This trait reads block.
 pub trait ReadBlock<T, B>: Read {
     /// This method reads format block.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::format::wav::{Wav, WavBlock};
+    /// use floaout::io::read::ReadBlock;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut reader = io::BufReader::new(File::open("foo.wav")?);
+    ///     let wav = Wav::default();
+    /// 
+    ///     // read Wav block
+    ///     let wav_block: WavBlock = reader.read_block(&wav)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn read_block(&mut self, _: T) -> Result<B>;
 }
 
@@ -438,6 +456,26 @@ pub trait ReadFmt<T, B>: Read {
     /// ```
     fn read_details(&mut self) -> Result<T>;
     /// This method reads format blocks.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::format::bub::{Bubble, BubbleBlocks};
+    /// use floaout::io::read::ReadFmt;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut reader = io::BufReader::new(File::open("foo.bub")?);
+    /// 
+    ///     // read Bubble details
+    ///     let bub: Bubble = reader.read_details()?;
+    /// 
+    ///     // read Bubble blocks
+    ///     let bub_blocks: BubbleBlocks = reader.read_blocks(&bub)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn read_blocks(&mut self, _: &T) -> Result<B>;
 }
 

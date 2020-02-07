@@ -237,6 +237,24 @@ fn write_bubble_field<W: Write + ?Sized>(this: &mut W, bub_field: BubbleField, b
 /// This trait writes block.
 pub trait WriteBlock<T, B>: Write {
     /// This method writes format block.
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::format::wav::Wav;
+    /// use floaout::io::write::WriteBlock;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut writer = io::BufWriter::new(File::create("foo.wav")?);
+    ///     let wav = Wav::default();
+    /// 
+    ///     // write Wav block
+    ///     writer.write_block(&wav, 1.0f32.into())?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn write_block(&mut self, _: T, _: B) -> Result<()>;
 }
 
@@ -290,7 +308,38 @@ pub trait WriteFmt<T, B>: Write {
     /// }
     /// ```
     fn write_details(&mut self, _: &T) -> Result<()>;
-    /// This method writes format blocks.
+    /// This method writes format block
+    /// 
+    /// # Examples
+    /// ```no_run
+    /// use std::io;
+    /// use std::fs::File;
+    /// use floaout::format::BubbleField;
+    /// use floaout::format::bub::{Bubble, BubbleBlock, BubbleBlocks};
+    /// use floaout::format::wav::WavBlock;
+    /// use floaout::io::write::WriteFmt;
+    /// 
+    /// fn main() -> io::Result<()> {
+    ///     let mut writer = io::BufWriter::new(File::create("foo.bub")?);
+    /// 
+    ///     // write Bubble details
+    ///     let bub: Bubble = Default::default();
+    ///     writer.write_details(&bub)?;
+    /// 
+    ///     // Bubble block
+    ///     let wav_block1 = WavBlock::from(1.0f32);
+    ///     let bub_field_1: BubbleField = vec![vec![vec![0], vec![4]], vec![vec![1], vec![5]], vec![vec![2], vec![6]], vec![vec![3], vec![7]]].into();
+    ///     let bub_block_1 = BubbleBlock::from_wav_block_and_bub_field(wav_block1, bub_field_1);
+    ///     // Bubble blocks
+    ///     let bub_block_vec = vec![bub_block_1];
+    ///     let bub_blocks = BubbleBlocks::from(bub_block_vec.into_boxed_slice());
+    /// 
+    ///     // write Bubble blocks
+    ///     writer.write_blocks(&bub, bub_blocks)?;
+    /// 
+    ///     Ok(())
+    /// }
+    /// ```
     fn write_blocks(&mut self, _: &T, _: B) -> Result<()>;
 }
 
