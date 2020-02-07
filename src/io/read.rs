@@ -565,7 +565,7 @@ impl<R: Read + Seek> ReadFmt<Wav, WavBlocks> for BufReader<R> {
 }
 
 /// This trait reads Bubbles in format for times.
-pub trait ReadBubsIn<T>: Read {
+pub trait ReadBubsIn<T, B>: Read {
     /// This method reads details of Bubbles in format for times.
     /// 
     /// # Examples
@@ -577,22 +577,23 @@ pub trait ReadBubsIn<T>: Read {
     /// 
     /// fn main() -> io::Result<()> {
     ///     let mut reader = io::BufReader::new(File::open("foo.oao")?);
+    ///     let oao: Floaout = reader.read_details()?;
     /// 
     ///     // read BubbleInFloaout details for 2 times.
-    ///     let bubs_in_oao: BubblesInFloaout = reader.read_bubs_details_for(2)?;
+    ///     let bubs_in_oao: BubblesInFloaout = reader.read_bubs_details(oao)?;
     /// 
     ///     Ok(())
     /// }
     /// ```
-    fn read_bubs_details_for(&mut self, times: usize) -> Result<T>;
+    fn read_bubs_details(&mut self, _: &T) -> Result<B>;
 }
 
-impl<R: Read + Seek> ReadBubsIn<BubblesInFloaout> for BufReader<R> {
+impl<R: Read + Seek> ReadBubsIn<Floaout, BubblesInFloaout> for BufReader<R> {
     #[inline]
-    fn read_bubs_details_for(&mut self, times: usize) -> Result<BubblesInFloaout> {
+    fn read_bubs_details(&mut self, oao: &Floaout) -> Result<BubblesInFloaout> {
         // Into Vec
         let mut vec_of_bub_in_oao: Vec<BubbleInFloaout> = Vec::new();
-        for _ in 0..times {
+        for _ in 0..oao.bubbles {
             let name_size: u8 = self.read_le_bytes()?;
             vec_of_bub_in_oao.push(
                 BubbleInFloaout {

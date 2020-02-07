@@ -407,10 +407,10 @@ pub trait WriteBubsIn<T>: Write {
     ///     Ok(())
     /// }
     /// ```
-    fn write_bubs_details(&mut self, _: T) -> Result<()>;
+    fn write_bubs_details(&mut self, _: &T) -> Result<()>;
 }
 
-impl<W: Write> WriteBubsIn<&BubblesInFloaout> for BufWriter<W> {
+impl<W: Write> WriteBubsIn<BubblesInFloaout> for BufWriter<W> {
     #[inline]
     fn write_bubs_details(&mut self, bubs_in_oao: &BubblesInFloaout) -> Result<()> {
         for bub_in_oao in &*bubs_in_oao.0 {

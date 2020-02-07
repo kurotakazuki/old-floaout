@@ -63,8 +63,10 @@ fn wav_test() -> Result<(), Box<dyn std::error::Error>> {
     let mut writer = BufWriter::new(File::create(file)?);
     writer.write_details(&write_wav)?;
     writer.write_blocks(&write_wav, write_wav_blocks.clone())?;
+
     // Finish writing.
     drop(writer);
+
     // Reader
     let mut reader = BufReader::new(File::open(file)?);
     let read_wav: Wav = reader.read_details()?;
