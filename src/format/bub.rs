@@ -30,6 +30,22 @@ pub struct Bubble {
 }
 
 impl Bubble {
+    /// This method casts Bubble field size and bits per sample to `Bubble`.
+    /// 
+    /// # Examples
+    /// ```
+    /// use floaout::format::bub::Bubble;
+    /// 
+    /// let bub = Bubble::from_bub_field_size_and_bits_per_sample((0u8, 0u8, 0u8).into(), 32);
+    /// assert_eq!(
+    ///     bub,
+    ///     Bubble {
+    ///         bub_field_size: (0u8, 0u8, 0u8).into(),
+    ///         bits_per_sample: 32,
+    ///         ..Default::default()
+    ///     }
+    /// );
+    /// ```
     pub fn from_bub_field_size_and_bits_per_sample(bub_field_size: BubbleFieldSize, bits_per_sample: u16) -> Self {
         Self {
             bub_field_size,

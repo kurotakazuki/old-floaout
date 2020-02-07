@@ -36,6 +36,21 @@ pub struct Wav {
 }
 
 impl Wav {
+    /// This method casts bits per sample to `Wav`.
+    /// 
+    /// # Examples
+    /// ```
+    /// use floaout::format::wav::Wav;
+    /// 
+    /// let wav = Wav::from_bits_per_sample(32);
+    /// assert_eq!(
+    ///     wav,
+    ///     Wav {
+    ///         bits_per_sample: 32,
+    ///         ..Default::default()
+    ///     }
+    /// );
+    /// ```
     pub fn from_bits_per_sample(bits_per_sample: u16) -> Self {
         Self {
             bits_per_sample,
@@ -43,11 +58,42 @@ impl Wav {
         }
     }
 
+    /// This method returns bytes per sample.
+    /// 
+    /// # Examples
+    /// ```
+    /// use floaout::format::wav::Wav;
+    /// 
+    /// let wav = Wav {
+    ///     bits_per_sample: 32,
+    ///     ..Default::default()
+    /// };
+    /// 
+    /// let bytes_per_sample = wav.bytes_per_sample();
+    /// 
+    /// assert_eq!(bytes_per_sample, 4);
+    /// ```
     pub fn bytes_per_sample(self) -> u16 {
         self.bits_per_sample / 8
     }
 
-    /// This method predict blocks from 'Wav'.
+    /// This method predicts blocks from 'Wav'.
+    /// 
+    /// # Examples
+    /// ```
+    /// use floaout::format::wav::Wav;
+    /// 
+    /// let wav = Wav {
+    ///     channels: 1,
+    ///     bits_per_sample: 32,
+    ///     data_size: 16,
+    ///     ..Default::default()
+    /// };
+    /// 
+    /// let blocks = wav.blocks();
+    /// 
+    /// assert_eq!(blocks, 4);
+    /// ```
     pub fn blocks(self) -> u64 {
         (self.data_size / (self.bytes_per_sample() * self.channels) as u32) as u64
     }
