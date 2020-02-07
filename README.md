@@ -56,9 +56,6 @@ If Song ID is "0x0000000000000000", this means no link.
 | Green             | `u8` (1)           | Green                             |
 | Blue              | `u8` (1)           | Blue                              |
 
-## Soap
-
-Soap makes extensions of Bubbles(.bub).
 
 ### Bubble (.bub)
 | Name             | `Type` (Bytes)       | Contents                          |
