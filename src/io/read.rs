@@ -572,15 +572,15 @@ pub trait ReadBubsIn<T, B>: Read {
     /// ```no_run
     /// use std::io;
     /// use std::fs::File;
-    /// use floaout::format::oao::BubblesInFloaout;
-    /// use floaout::io::read::ReadBubsIn;
+    /// use floaout::format::oao::{BubblesInFloaout, Floaout};
+    /// use floaout::io::read::{ReadBubsIn, ReadFmt};
     /// 
     /// fn main() -> io::Result<()> {
     ///     let mut reader = io::BufReader::new(File::open("foo.oao")?);
     ///     let oao: Floaout = reader.read_details()?;
     /// 
     ///     // read BubbleInFloaout details for 2 times.
-    ///     let bubs_in_oao: BubblesInFloaout = reader.read_bubs_details(oao)?;
+    ///     let bubs_in_oao: BubblesInFloaout = reader.read_bubs_details(&oao)?;
     /// 
     ///     Ok(())
     /// }
