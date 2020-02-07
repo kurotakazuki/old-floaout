@@ -1,10 +1,10 @@
 //! Read formats
 
 use std::io::Seek;
-use crate::format::{BubbleField, BubbleFieldSize, Color};
+use crate::format::{BubbleField, BubbleFieldSize, Color, Sample};
 use crate::format::bub::Bubble;
 use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
-use crate::format::wav::Wav;
+use crate::format::wav::{Wav, WavBlock, WavBlocks};
 use std::convert::TryInto;
 use std::io::{BufReader, Read, Result};
 
@@ -303,6 +303,28 @@ impl<R: Read + ?Sized> ReadBytesFor<Vec<u8>> for R {
         buf.reverse();
 
         Ok(buf)
+    }
+}
+
+impl<R: Read + ?Sized> ReadBytesFor<Sample> for R {
+    #[inline]
+    fn read_be_bytes_for(&mut self, size: usize) -> Result<Sample> {
+        match size {
+            4 => Ok(Sample::Float32(self.read_be_bytes()?)),
+            8 => Ok(Sample::Float64(self.read_be_bytes()?)),
+            // This should be change to Error type.
+            _ => Ok(Sample::Float32(0.0))
+        }
+    }
+
+    #[inline]
+    fn read_le_bytes_for(&mut self, size: usize) -> Result<Sample> {
+        match size {
+            4 => Ok(Sample::Float32(self.read_le_bytes()?)),
+            8 => Ok(Sample::Float64(self.read_le_bytes()?)),
+            // This should be change to Error type.
+            _ => Ok(Sample::Float32(0.0))
+        }
     }
 }
 
