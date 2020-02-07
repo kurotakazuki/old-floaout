@@ -29,6 +29,16 @@ pub struct Bubble {
     pub overall: BubbleField
 }
 
+impl Bubble {
+    pub fn from_bub_field_size_and_bits_per_sample(bub_field_size: BubbleFieldSize, bits_per_sample: u16) -> Self {
+        Self {
+            bub_field_size,
+            bits_per_sample,
+            ..Default::default()
+        }
+    }
+}
+
 impl From<Floaout> for Bubble {
     fn from(oao: Floaout) -> Self {
         Self {

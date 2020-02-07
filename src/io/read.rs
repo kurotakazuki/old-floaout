@@ -3,7 +3,7 @@
 use std::io::Seek;
 use crate::format::{BubbleField, BubbleFieldSize, Color, Sample};
 use crate::format::bub::{Bubble, BubbleBlock, BubbleBlocks};
-use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout};
+use crate::format::oao::{BubbleInFloaout, BubblesInFloaout, Floaout, FloaoutBlock, FloaoutBlocks};
 use crate::format::wav::{Wav, WavBlock, WavBlocks};
 use std::convert::TryInto;
 use std::io::{BufReader, Read, Result};
@@ -387,6 +387,20 @@ impl<R: Read + ?Sized> ReadBlock<&Bubble, BubbleBlock> for R {
                 bub_field
             }
         )
+    }
+}
+
+impl<R: Read + ?Sized> ReadBlock<&Floaout, FloaoutBlock> for R {
+    #[inline]
+    fn read_block(&mut self, oao: &Floaout) -> Result<FloaoutBlock> {
+        let mut bub_block_vec = Vec::new();
+        let bub = Bubble::from_bub_field_size_and_bits_per_sample(oao.bub_field_size, oao.bits_per_sample);
+        for _ in 0..oao.bubbles {
+            let bub_block = self.read_block(&bub)?;
+            bub_block_vec.push(bub_block);
+        }
+
+        Ok(bub_block_vec.into())
     }
 }
 
