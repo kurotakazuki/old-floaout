@@ -31,11 +31,11 @@ Note: Floaout can build only `nightly` at this moment.
 #### Each Block
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
-| Wave Data 1       | (Wave Data 1)      |                                   |
-| Form 1            | (Bubble Field*u8)  | Data of Bubble Field              |
+| Wave Data 1       | `Sample` (4 or 8)  | 1 block's Wave Data               |
+| Bubble Field 1    | (Bubble Field*u8)  | 1 block's Bubble Field            |
 | …                 | …                  | …                                 |
-| Wave Data i       | (Wave Data i)      |                                   |
-| Form i            | (Bubble Field*u8)  | Data of Bubble Field              |
+| Wave Data i       | `Sample` (4 or 8)  | i block's Wave Data               |
+| Bubble Field i    | (Bubble Field*u8)  | i block's Bubble Field            |
 | CRC-32C           | `u32` (4)          | Everything until previous CRC     |
 
 i = Number of Bubbles
@@ -74,11 +74,11 @@ If Song ID is "0x0000000000000000", this means no link.
 | Name Size        | `u8` (1)             | Name Size                         |
 | Name             | `String`             | Name of bubble (UTF-8)            |
 | Overall          | `Vec<Vec<Vec<u8>>>`  | Overall of Bubble Field           |
-| Wave Data n      | (Wave Data n)        |                                   |
-| Form n           | (Bubble Field*u8)    | Data of Bubble Field              |
+| Wave Data n      | `Sample` (4 or 8)    | n block's Wave Data               |
+| Bubble Field n   | (Bubble Field*u8)    | n block's Bubble Field            |
 | …                | …                    | …                                 |
 
-n = Number of Block
+n = Number of Blocks
 
 
 ## Developer

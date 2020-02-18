@@ -10,5 +10,3 @@ exclude = [".gitignore"]
 readme = "README.md"
 repository = "https://github.com/kurotakazuki/floaout"
 edition = "2018"
-
-[dependencies]
