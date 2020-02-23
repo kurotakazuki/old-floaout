@@ -74,11 +74,11 @@ If Song ID is "0x0000000000000000", this means no link.
 | Name Size        | `u8` (1)             | Name Size                         |
 | Name             | `String`             | Name of bubble (UTF-8)            |
 | Overall          | `Vec<Vec<Vec<u8>>>`  | Overall of Bubble Field           |
-| Wave Data n      | `Sample` (4 or 8)    | n block's Wave Data               |
-| Bubble Field n   | (Bubble Field*u8)    | n block's Bubble Field            |
-| …                | …                    | …                                 |
-
-n = Number of Blocks
+#### Each Block
+| Name             | `Type` (Bytes)       | Contents                          |
+| -----------------| -------------------- | --------------------------------- |
+| Wave Data        | `Sample` (4 or 8)    | Wave Data                         |
+| Bubble Field     | (Bubble Field*u8)    | Bubble Field                      |
 
 
 ## Developer
