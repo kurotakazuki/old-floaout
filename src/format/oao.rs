@@ -6,7 +6,7 @@ use crate::format::{BubbleFieldSize, Color};
 use crate::format::bub::BubbleBlock;
 
 /// Details of the Floaout file.
-#[derive(Clone, Copy, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Floaout {
     /// This is the number of `Floaout` version.
     pub version: u8,
@@ -25,7 +25,15 @@ pub struct Floaout {
     /// Sampling Rate
     pub sampling_rate: u32,
     /// Bits Per Sample
-    pub bits_per_sample: u16
+    pub bits_per_sample: u16,
+    /// Title Size
+    pub title_size: u8,
+    /// Title
+    pub title: String,
+    /// Artist Size
+    pub artist_size: u8,
+    /// Artist
+    pub artist: String
 }
 
 /// This structure contains data about Bubble in Floaout.

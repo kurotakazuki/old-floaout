@@ -18,6 +18,10 @@ Note: Floaout can build only `nightly` at this moment.
 | Blocks            | `u64` (8)          | Number of Block                   |
 | Sampling Rate     | `u32` (4)          | Sampling Rate                     |
 | Bits Per Sample   | `u16` (2)          | Bits Per Sample                   |
+| Title Size        | `u8` (1)           | Title Size                        |
+| Title             | `String`           | Title (UTF-8)                     |
+| Artist Size       | `u8` (1)           | Artist Size                       |
+| Artist            | `String`           | Artist (UTF-8)                    |
 | CRC-32C           | `u32` (4)          | Everything until Begin            |
 #### Each Bubble
 | Name              | `Type` (Bytes)     | Contents                          |
