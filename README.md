@@ -26,13 +26,14 @@ Note: Floaout can build only `nightly` at this moment.
 #### Each Bubble
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
+| Bubble ID         | `u64` (8)          | Bubble ID of the Bubble           |
 | Name Size         | `u8` (1)           | Name Size                         |
 | Name              | `String`           | Name of bubble (UTF-8)            |
 | Red               | `u8` (1)           | Red                               |
 | Green             | `u8` (1)           | Green                             |
 | Blue              | `u8` (1)           | Blue                              |
 | CRC-32C           | `u32` (4)          | Everything until Name Size        |
-#### Each Floaout Block
+#### Each Floaout's Block
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
 | Wave Data 1       | `Sample` (4 or 8)  | 1 bubble's Wave Data              |
@@ -66,6 +67,7 @@ If Song ID is "0x0000000000000000", this means no link.
 | -----------------| -------------------- | --------------------------------- |
 | Bubble           | `str` (3)            | “bub” means Bubble                |
 | Version          | `u8` (1)             | Version of Bubble (0~255)         |
+| Bubble ID        | `u64` (8)            | Bubble ID of the file             |
 | Length           | `u8` (1)             | Length of Bubble field (2^n)      |
 | Width            | `u8` (1)             | Width of Bubble field (2^n)       |
 | Height           | `u8` (1)             | Height of Bubble field (2^n)      |
@@ -78,12 +80,17 @@ If Song ID is "0x0000000000000000", this means no link.
 | Name Size        | `u8` (1)             | Name Size                         |
 | Name             | `String`             | Name of bubble (UTF-8)            |
 | Overall          | `Vec<Vec<Vec<u8>>>`  | Overall of Bubble Field           |
-#### Each Bubble Block
+#### Each Bubble's Block
 | Name             | `Type` (Bytes)       | Contents                          |
 | -----------------| -------------------- | --------------------------------- |
 | Wave Data        | `Sample` (4 or 8)    | Wave Data                         |
 | Bubble Field     | (Bubble Field*u8)    | Bubble Field                      |
 
+### What's Bubble ID?
+
+Bubble ID is 8 bytes data. It links to copyright.
+This ID will help artists to get royalty and easy to make remixs.
+If Bubble ID is "0x0000000000000000", this means no link.
 
 ## Developer
 
