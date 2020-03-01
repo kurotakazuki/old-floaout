@@ -15,7 +15,7 @@ Note: Floaout can build only `nightly` at this moment.
 | Width             | `u8` (1)           | Width of Bubble field (2^n)       |
 | Height            | `u8` (1)           | Height of Bubble field (2^n)      |
 | Bubbles           | `u16` (2)          | Number of Bubbles (0~65535)       |
-| Blocks            | `u64` (8)          | Number of Block                   |
+| Blocks            | `u64` (8)          | Number of block                   |
 | Sampling Rate     | `u32` (4)          | Sampling Rate                     |
 | Bits Per Sample   | `u16` (2)          | Bits Per Sample                   |
 | Title Size        | `u8` (1)           | Title Size                        |
@@ -32,15 +32,15 @@ Note: Floaout can build only `nightly` at this moment.
 | Red               | `u8` (1)           | Red                               |
 | Green             | `u8` (1)           | Green                             |
 | Blue              | `u8` (1)           | Blue                              |
-| CRC-32C           | `u32` (4)          | Everything until Name Size        |
-#### Each Floaout's Block
+| CRC-32C           | `u32` (4)          | Everything until previous CRC     |
+#### Each Floaout block
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
-| Wave Data 1       | `Sample` (4 or 8)  | 1 bubble's Wave Data              |
-| Bubble Field 1    | (Bubble Field*u8)  | 1 bubble's Bubble Field           |
+| Waveform Data     | `Sample` (4 or 8)  | 1st Bubble's Waveform Data        |
+| Bubble Field      | (Bubble Field*u8)  | 1st Bubble's Bubble Field         |
 | …                 | …                  | …                                 |
-| Wave Data i       | `Sample` (4 or 8)  | i bubble's Wave Data              |
-| Bubble Field i    | (Bubble Field*u8)  | i bubble's Bubble Field           |
+| Waveform Data     | `Sample` (4 or 8)  | ith Bubble's Waveform Data        |
+| Bubble Field      | (Bubble Field*u8)  | ith Bubble's Bubble field         |
 | CRC-32C           | `u32` (4)          | Everything until previous CRC     |
 
 i = Number of Bubbles
@@ -74,17 +74,17 @@ If Song ID is "0x0000000000000000", this means no link.
 | Red              | `u8` (1)             | Red                               |
 | Green            | `u8` (1)             | Green                             |
 | Blue             | `u8` (1)             | Blue                              |
-| Blocks           | `u64` (8)            | Number of Block                   |
+| Blocks           | `u64` (8)            | Number of block                   |
 | Sampling Rate    | `u32` (4)            | Sampling Rate                     |
 | Bits Per Sample  | `u16` (2)            | Bits Per Sample                   |
 | Name Size        | `u8` (1)             | Name Size                         |
 | Name             | `String`             | Name of bubble (UTF-8)            |
-| Overall          | `Vec<Vec<Vec<u8>>>`  | Overall of Bubble Field           |
-#### Each Bubble's Block
+| Overall          | `Vec<Vec<Vec<u8>>>`  | Overall of Bubble field           |
+#### Each Bubble block
 | Name             | `Type` (Bytes)       | Contents                          |
 | -----------------| -------------------- | --------------------------------- |
-| Wave Data        | `Sample` (4 or 8)    | Wave Data                         |
-| Bubble Field     | (Bubble Field*u8)    | Bubble Field                      |
+| Waveform Data    | `Sample` (4 or 8)    | Waveform Data                     |
+| Bubble Field     | (Bubble Field*u8)    | Bubble field                      |
 
 ### What's Bubble ID?
 

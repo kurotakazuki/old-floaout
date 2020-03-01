@@ -13,7 +13,10 @@ pub struct Floaout {
     /// It links to title, artist, lyrics, image, etc.
     /// This ID will save the file size and enhance versatility.
     ///  Developers also have the merit that they don't have to process title string and so on in the file and allow concentrate on audio processing.
-    ///  If Song ID is "0x0000000000000000", this means no link.
+    /// Song ID is 8 bytes data. It links to title, artist, lyrics, image, etc.
+    /// This ID will save the file size and enhance versatility.
+    /// Developers also have the merit that they don't have to process title string and so on in the file and allow concentrate on audio processing.
+    /// If Song ID is "0x0000000000000000", this means no link.
     pub song_id: u64,
     /// This includes length, width and height.
     pub bub_field_size: BubbleFieldSize,
@@ -39,6 +42,10 @@ pub struct Floaout {
 /// This structure contains data about Bubble in Floaout.
 #[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct BubbleInFloaout {
+    /// Bubble ID is 8 bytes data. It links to copyright.
+    /// This ID will help artists to get royalty and easy to make remixs.
+    /// If Bubble ID is "0x0000000000000000", this means no link.
+    pub bubble_id: u64,
     /// Bubble Name Size
     pub name_size: u8,
     /// Name of Bubble
