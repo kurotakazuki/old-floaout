@@ -10,7 +10,7 @@ Note: Floaout can build only `nightly` at this moment.
 | ----------------- | ------------------ | --------------------------------- |
 | Floaout           | `str` (3)          | “oao” means Floaout               |
 | Version           | `u8` (1)           | Version of Floaout (0~255)        |
-| Song ID           | `u64` (8)          | Song ID of the file               |
+| Song ID           | `u128` (16)        | Song ID of the file               |
 | Length            | `u8` (1)           | Length of Bubble field (2^n)      |
 | Width             | `u8` (1)           | Width of Bubble field (2^n)       |
 | Height            | `u8` (1)           | Height of Bubble field (2^n)      |
@@ -37,20 +37,20 @@ Note: Floaout can build only `nightly` at this moment.
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
 | Waveform Data     | `Sample` (4 or 8)  | 1st Bubble's Waveform Data        |
-| Bubble Field      | (Bubble Field*u8)  | 1st Bubble's Bubble Field         |
+| Bubble Field      | (L * W * H)        | 1st Bubble's Bubble Field         |
 | …                 | …                  | …                                 |
 | Waveform Data     | `Sample` (4 or 8)  | ith Bubble's Waveform Data        |
-| Bubble Field      | (Bubble Field*u8)  | ith Bubble's Bubble field         |
+| Bubble Field      | (L * W * H)        | ith Bubble's Bubble field         |
 | CRC-32C           | `u32` (4)          | Everything until previous CRC     |
 
 i = Number of Bubbles
 
 ### What's Song ID?
 
-Song ID is 8 bytes data. It links to title, artist, lyrics, image, etc.
+Song ID is 16 bytes data. It links to title, artist, lyrics, image, etc.
 This ID will save the file size and enhance versatility.
 Developers also have the merit that they don't have to process title string and so on in the file and allow concentrate on audio processing.
-If Song ID is "0x0000000000000000", this means no link.
+If Song ID is "0", this means no link.
 
 #### BubbleInFloaout
 | Name              | `Type` (Bytes)     | Contents                          |
@@ -67,7 +67,7 @@ If Song ID is "0x0000000000000000", this means no link.
 | -----------------| -------------------- | --------------------------------- |
 | Bubble           | `str` (3)            | “bub” means Bubble                |
 | Version          | `u8` (1)             | Version of Bubble (0~255)         |
-| Bubble ID        | `u64` (8)            | Bubble ID of the file             |
+| Bubble ID        | `u128` (16)          | Bubble ID of the file             |
 | Length           | `u8` (1)             | Length of Bubble field (2^n)      |
 | Width            | `u8` (1)             | Width of Bubble field (2^n)       |
 | Height           | `u8` (1)             | Height of Bubble field (2^n)      |
@@ -84,13 +84,13 @@ If Song ID is "0x0000000000000000", this means no link.
 | Name             | `Type` (Bytes)       | Contents                          |
 | -----------------| -------------------- | --------------------------------- |
 | Waveform Data    | `Sample` (4 or 8)    | Waveform Data                     |
-| Bubble Field     | (Bubble Field*u8)    | Bubble field                      |
+| Bubble Field     | (L * W * H)          | Bubble field                      |
 
 ### What's Bubble ID?
 
-Bubble ID is 8 bytes data. It links to copyright.
+Bubble ID is 16 bytes data. It links to copyright.
 This ID will help artists to get royalty and easy to make remixs.
-If Bubble ID is "0x0000000000000000", this means no link.
+If Bubble ID is "0", this means no link.
 
 ## Developer
 

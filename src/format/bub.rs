@@ -10,10 +10,10 @@ use std::convert::{TryFrom, TryInto};
 pub struct Bubble {
     /// This is the number of `Bubble` version.
     pub version: u8,
-    /// Bubble ID is 8 bytes data. It links to copyright.
+    /// Bubble ID is 16 bytes data. It links to copyright.
     /// This ID will help artists to get royalty and easy to make remixs.
-    /// If Bubble ID is "0x0000000000000000", this means no link.
-    pub bubble_id: u64,
+    /// If Bubble ID is "0", this means no link.
+    pub bubble_id: u128,
     /// This includes length, width and height.
     pub bub_field_size: BubbleFieldSize,
     /// This includes red, green, blue.

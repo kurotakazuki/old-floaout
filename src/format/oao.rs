@@ -42,10 +42,10 @@ pub struct Floaout {
 /// This structure contains data about Bubble in Floaout.
 #[derive(Clone, Debug, Default, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub struct BubbleInFloaout {
-    /// Bubble ID is 8 bytes data. It links to copyright.
+    /// Bubble ID is 16 bytes data. It links to copyright.
     /// This ID will help artists to get royalty and easy to make remixs.
-    /// If Bubble ID is "0x0000000000000000", this means no link.
-    pub bubble_id: u64,
+    /// If Bubble ID is "0", this means no link.
+    pub bubble_id: u128,
     /// Bubble Name Size
     pub name_size: u8,
     /// Name of Bubble
