@@ -5,6 +5,14 @@ Floaout is the forefront audio format that enables immersive sound which takes a
 
 Note: Floaout can build only `nightly` at this moment.
 
+## Documentation
+
+### English
+
+### Japanese
+
+- [BubbleとFloaoutの仕様書](floaout_ja.pdf)
+
 ## Floaout (.oao)
 | Name              | `Type` (Bytes)     | Contents                          |
 | ----------------- | ------------------ | --------------------------------- |
